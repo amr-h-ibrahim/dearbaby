@@ -1,0 +1,44 @@
+diff --git a/node_modules/deepmerge-ts/dist/index.cjs b/node_modules/deepmerge-ts/dist/index.cjs
+index 8c05cc7..80a6cc3 100644
+--- a/node_modules/deepmerge-ts/dist/index.cjs
++++ b/node_modules/deepmerge-ts/dist/index.cjs
+@@ -265,7 +265,7 @@ function getUtils(options, customizedDeepmerge) {
+         mergeFunctions: {
+             ...mergeFunctions,
+             ...Object.fromEntries(Object.entries(options)
+-                .filter(([key, option]) => Object.hasOwn(mergeFunctions, key))
++                .filter(([key, option]) => mergeFunctions.hasOwnProperty(key))
+                 .map(([key, option]) => (option === false ? [key, mergeFunctions.mergeOthers] : [key, option]))),
+         },
+         metaDataUpdater: (options.metaDataUpdater ?? defaultMetaDataUpdater),
+@@ -499,7 +499,7 @@ function getIntoUtils(options, customizedDeepmergeInto) {
+         mergeFunctions: {
+             ...mergeIntoFunctions,
+             ...Object.fromEntries(Object.entries(options)
+-                .filter(([key, option]) => Object.hasOwn(mergeIntoFunctions, key))
++                .filter(([key, option]) => mergeIntoFunctions.hasOwnProperty(key))
+                 .map(([key, option]) => (option === false ? [key, mergeIntoFunctions.mergeOthers] : [key, option]))),
+         },
+         metaDataUpdater: (options.metaDataUpdater ?? defaultMetaDataUpdater),
+diff --git a/node_modules/deepmerge-ts/dist/index.mjs b/node_modules/deepmerge-ts/dist/index.mjs
+index c34694c..aede3a2 100644
+--- a/node_modules/deepmerge-ts/dist/index.mjs
++++ b/node_modules/deepmerge-ts/dist/index.mjs
+@@ -263,7 +263,7 @@ function getUtils(options, customizedDeepmerge) {
+         mergeFunctions: {
+             ...mergeFunctions,
+             ...Object.fromEntries(Object.entries(options)
+-                .filter(([key, option]) => Object.hasOwn(mergeFunctions, key))
++                .filter(([key, option]) => mergeFunctions.hasOwnProperty(key))
+                 .map(([key, option]) => (option === false ? [key, mergeFunctions.mergeOthers] : [key, option]))),
+         },
+         metaDataUpdater: (options.metaDataUpdater ?? defaultMetaDataUpdater),
+@@ -497,7 +497,7 @@ function getIntoUtils(options, customizedDeepmergeInto) {
+         mergeFunctions: {
+             ...mergeIntoFunctions,
+             ...Object.fromEntries(Object.entries(options)
+-                .filter(([key, option]) => Object.hasOwn(mergeIntoFunctions, key))
++                .filter(([key, option]) => mergeIntoFunctions.hasOwnProperty(key))
+                 .map(([key, option]) => (option === false ? [key, mergeIntoFunctions.mergeOthers] : [key, option]))),
+         },
+         metaDataUpdater: (options.metaDataUpdater ?? defaultMetaDataUpdater),
