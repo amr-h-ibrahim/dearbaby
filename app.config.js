@@ -6,7 +6,7 @@ module.exports = {
     infoPlist: {},
     bundleIdentifier: "com.dearbaby.app",
     usesIcloudStorage: false,
-    buildNumber: "4",
+    buildNumber: "5",
     privacyManifests: {
       NSPrivacyAccessedAPITypes: [
         {
@@ -49,7 +49,7 @@ module.exports = {
     package: "com.dearbaby.app",
     permissions: [],
     adaptiveIcon: {},
-    versionCode: 4,
+    versionCode: 5,
     blockedPermissions: [],
   },
   privacy: "unlisted",
@@ -65,7 +65,7 @@ module.exports = {
   androidStatusBar: {},
   userInterfaceStyle: "automatic",
   androidNavigationBar: {},
-  version: "1.0.4",
+  version: "1.0.5",
   assetBundlePatterns: ["**/*"],
   plugins: [
     [
