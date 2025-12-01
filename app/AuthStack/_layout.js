@@ -7,6 +7,7 @@ import { systemWeights } from "react-native-typography";
 import palettes from "../../themes/palettes";
 import useNavigation from "../../utils/useNavigation";
 import useWindowDimensions from "../../utils/useWindowDimensions";
+// AuthDeepLinkHandler is now mounted at the root level in app/_layout.js
 
 function DefaultAndroidBackIcon({ tintColor }) {
   return (
@@ -24,6 +25,8 @@ function DefaultAndroidBackIcon({ tintColor }) {
 export default function Layout() {
   const theme = useTheme();
 
+  // Note: AuthDeepLinkHandler is now mounted at the root level in app/_layout.js
+  // to ensure deep links are handled regardless of which screen is active
   return (
     <Stack
       screenOptions={{
@@ -44,6 +47,14 @@ export default function Layout() {
         name="index"
         options={{
           title: "Login",
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignupScreen"
+        options={{
+          title: "Sign Up",
+          headerShown: false,
         }}
       />
     </Stack>

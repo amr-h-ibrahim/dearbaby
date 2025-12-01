@@ -2,7 +2,6 @@
   "/app/index.js": "AppInit",
   "/components/AvatarBlock.js": "Avatar",
   "/app/ProfileScreen.js": "Profile",
-  "/app/SignUpScreen.js": "Sign up",
   "/app/TestDebugScreen.js": "Test_Debug",
   "/app/MainStack/BottomTabNavigator/index.js": "Home",
   "/app/MainStack/BottomTabNavigator/SettingScreen.js": "Setting",

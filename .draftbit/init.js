@@ -1,3 +1,5 @@
+import "../global.css";
+
 if (require("react-native").Platform.OS === "web" && typeof window !== "undefined") {
   const { Child } = require("@draftbit/iframe-element-picker");
   Child.init("https://next.draftbit.com", process.env.EXPO_PUBLIC_PROJECT_PATH, false);

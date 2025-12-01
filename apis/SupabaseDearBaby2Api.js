@@ -8,7 +8,40 @@ import { encodeQueryParam, renderParam, renderQueryString } from "../utils/encod
 import * as GlobalVariables from "../config/GlobalVariableContext";
 
 const cleanHeaders = (headers) =>
-  Object.fromEntries(Object.entries(headers).filter((kv) => kv[1] != null));
+  Object.fromEntries(
+    Object.entries(headers).filter(([_, value]) => {
+      if (value === null || value === undefined) {
+        return false;
+      }
+      if (typeof value === "string" && value.trim() === "") {
+        return false;
+      }
+      return true;
+    }),
+  );
+
+const deriveApiKey = (Constants) => {
+  if (typeof Constants?.SUPABASE_ANON_KEY === "string" && Constants.SUPABASE_ANON_KEY.trim()) {
+    return Constants.SUPABASE_ANON_KEY.trim();
+  }
+  if (typeof Constants?.apiKey === "string" && Constants.apiKey.trim()) {
+    return Constants.apiKey.trim();
+  }
+  return undefined;
+};
+
+const deriveAuthorization = (Constants) => {
+  if (
+    typeof Constants?.AUTHORIZATION_HEADER === "string" &&
+    Constants.AUTHORIZATION_HEADER.trim()
+  ) {
+    return Constants.AUTHORIZATION_HEADER.trim();
+  }
+  if (typeof Constants?.auth_token === "string" && Constants.auth_token.trim()) {
+    return `Bearer ${Constants.auth_token.trim()}`;
+  }
+  return undefined;
+};
 
 export const babiesCreatePOST = async (
   Constants,
@@ -35,9 +68,13 @@ export const babiesCreatePOST = async (
         created_by: created_by,
       }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -144,9 +181,12 @@ export const babiesListGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        "Content-Profile": Constants["Content-Profile"],
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -258,9 +298,13 @@ export const getBabiesGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -370,9 +414,13 @@ export const getCurrentUserGET = async (Constants, _args, handlers, timeout) => 
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -491,9 +539,13 @@ export const getProfile$me$GET = async (Constants, { user_id }, handlers, timeou
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -593,6 +645,8 @@ export const FetchGetProfile$me$GET = ({
 export const loginPOST = async (Constants, { email, password }, handlers, timeout) => {
   const paramsDict = {};
   paramsDict["grant_type"] = "password";
+  const rawAnonKey = Constants?.SUPABASE_ANON_KEY ?? Constants?.apiKey ?? "";
+  const anonKey = typeof rawAnonKey === "string" ? rawAnonKey.trim() : "";
   const url = `https://qiekucvzrkfhamhjrxtk.supabase.co/auth/v1/token${renderQueryString(
     paramsDict,
   )}`;
@@ -606,13 +660,25 @@ export const loginPOST = async (Constants, { email, password }, handlers, timeou
     }, timeout);
   }
   try {
+    console.log("Supabase login request (v2)", {
+      hasAnonKey: Boolean(anonKey),
+      anonKeyLength: anonKey.length,
+      anonKeyPrefix: anonKey ? anonKey.substring(0, 6) : "",
+      emailProvided: Boolean(email),
+    });
+    if (!anonKey) {
+      throw new Error("Supabase anon key is not configured.");
+    }
+    const headers = cleanHeaders({
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      apikey: anonKey,
+      Authorization: `Bearer ${anonKey}`,
+    });
+    console.log("Supabase login headers (v2)", Object.keys(headers));
     const res = await fetch(url, {
       body: JSON.stringify({ email: email, password: password }),
-      headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
-        "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
-      }),
+      headers,
       method: "POST",
       signal: controller.signal,
     });
@@ -712,120 +778,24 @@ export const FetchLoginPOST = ({
   return children({ loading, data, error, refetchLogin: refetch });
 };
 
-export const mediaAssetsInsertPOST = async (Constants, _args, handlers, timeout) => {
-  const url = `https://qiekucvzrkfhamhjrxtk.supabase.co/rest/v1/rpc/media_assets_insert`;
-  const controller = new AbortController();
-  let timeoutObj;
-  if (timeout) {
-    timeoutObj = setTimeout(() => {
-      const err = new Error(`Timeout after ${timeout}ms`);
-      err.__type = "TIMEOUT";
-      controller.abort(err);
-    }, timeout);
-  }
-  try {
-    const res = await fetch(url, {
-      body: JSON.stringify({
-        p_baby_id: "",
-        p_original_filename: "",
-        p_mime_type: "image/jpeg",
-        p_bytes: 0,
-        p_album_id: null,
-      }),
-      headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
-        "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
-      }),
-      method: "POST",
-      signal: controller.signal,
-    });
-    timeoutObj && clearTimeout(timeoutObj);
-    return handleResponse(res, handlers);
-  } catch (e) {
-    if (e.__type === "TIMEOUT") {
-      handlers.onTimeout?.();
-    } else if (timeoutObj) {
-      clearTimeout(timeoutObj);
-    }
-    throw e;
-  }
-};
-
-export const useMediaAssetsInsertPOST = (initialArgs = {}, { handlers = {} } = {}) => {
-  const queryClient = useQueryClient();
-  const Constants = GlobalVariables.useValues();
-  return useMutation(
-    (args) => mediaAssetsInsertPOST(Constants, { ...initialArgs, ...args }, handlers),
-    {
-      onError: (err, variables, { previousValue }) => {
-        if (previousValue) {
-          return queryClient.setQueryData("Media_assets_insert", previousValue);
-        }
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries("Media_assets_insert");
-        queryClient.invalidateQueries("Media_assets_inserts");
-      },
-    },
-  );
-};
-
-export const FetchMediaAssetsInsertPOST = ({
-  children,
-  onData = () => {},
-  handlers = {},
-  refetchInterval,
-  refetchOnWindowFocus,
-  refetchOnMount,
-  refetchOnReconnect,
-  retry,
-  staleTime,
-  timeout,
-}) => {
-  const Constants = GlobalVariables.useValues();
-  const isFocused = useIsFocused();
-  const prevIsFocused = usePrevious(isFocused);
-
-  const {
-    isLoading: loading,
-    data,
-    error,
-    mutate: refetch,
-  } = useMediaAssetsInsertPOST(
-    {},
-    {
-      refetchInterval,
-      refetchOnWindowFocus,
-      refetchOnMount,
-      refetchOnReconnect,
-      retry,
-      staleTime,
-      timeout,
-      handlers: { onData, ...handlers },
-    },
-  );
-
-  React.useEffect(() => {
-    if (!prevIsFocused && isFocused && refetchOnWindowFocus !== false) {
-      refetch();
-    }
-  }, [isFocused, prevIsFocused, refetchOnWindowFocus]);
-
-  React.useEffect(() => {
-    if (error) {
-      console.error(error);
-      if (error.status) {
-        console.error("Fetch error: " + error.status + " " + error.statusText);
-      }
-    }
-  }, [error]);
-  return children({ loading, data, error, refetchMediaAssetsInsert: refetch });
-};
-
 export const mintAvatarUpload$EdgeFunction$POST = async (
   Constants,
-  { bytes, content_type, mimeType, target },
+  {
+    bytes,
+    content_type,
+    contentType,
+    mimeType,
+    target,
+    album_id,
+    albumId,
+    baby_id,
+    babyId,
+    file_name,
+    fileName,
+    extension,
+    size,
+    finalize,
+  } = {},
   handlers,
   timeout,
 ) => {
@@ -840,17 +810,36 @@ export const mintAvatarUpload$EdgeFunction$POST = async (
     }, timeout);
   }
   try {
+    if (!Constants?.auth_token) {
+      throw new Error("Missing auth token for mint-upload");
+    }
+
+    const resolvedMimeType = mimeType ?? contentType ?? content_type ?? "image/jpeg";
+    const resolvedBytes = typeof bytes === "number" ? bytes : (size ?? 0);
+    const resolvedFilename =
+      fileName ??
+      file_name ??
+      (extension ? `upload-${Date.now()}.${extension.replace(/^\./, "")}` : undefined) ??
+      `upload-${Date.now()}.jpg`;
+
+    const payload = Object.fromEntries(
+      Object.entries({
+        target: target ?? "media",
+        babyId: babyId ?? baby_id ?? undefined,
+        albumId: albumId ?? album_id ?? undefined,
+        mimeType: resolvedMimeType,
+        bytes: resolvedBytes,
+        filename: resolvedFilename,
+        finalize,
+      }).filter(([, value]) => value != null),
+    );
+
     const res = await fetch(url, {
-      body: JSON.stringify({
-        target: target,
-        mimeType: mimeType,
-        content_type: content_type,
-        bytes: bytes,
-      }),
+      body: JSON.stringify(payload),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        Authorization: `Bearer ${Constants["auth_token"]}`,
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
       }),
       method: "POST",
       signal: controller.signal,
@@ -973,9 +962,13 @@ export const mintAvatarView$EdgeFunction$POST = async (
     const res = await fetch(url, {
       body: JSON.stringify({ extension: "jpg" }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -1100,11 +1093,11 @@ export const pATCHProfilePATCH = async (
         avatar_object_key: object_key,
       }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Authorization: deriveAuthorization(Constants),
         "Content-Profile": "dearbaby",
         "Content-Type": "application/json",
         Prefer: "return=representation",
-        apikey: Constants["apiKey"],
+        apikey: deriveApiKey(Constants),
       }),
       method: "PATCH",
       signal: controller.signal,
@@ -1159,9 +1152,13 @@ export const parentBabyCreatePOST = async (Constants, _args, handlers, timeout) 
         role: "owner",
       }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -1268,9 +1265,13 @@ export const refreshTokenPOST = async (Constants, { refresh_token }, handlers, t
     const res = await fetch(url, {
       body: JSON.stringify({ refresh_token: refresh_token }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -1385,9 +1386,13 @@ export const signUpPOST = async (Constants, { email, password }, handlers, timeo
     const res = await fetch(url, {
       body: JSON.stringify({ email: email, password: password }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -1507,10 +1512,10 @@ export const uPSERTProfilePOST = async (Constants, { user_id }, handlers, timeou
     const res = await fetch(url, {
       body: JSON.stringify({ uid: user_id }),
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Authorization: deriveAuthorization(Constants),
         "Content-Type": "application/json",
         Prefer: "resolution=merge-duplicates, return=representation",
-        apikey: Constants["apiKey"],
+        apikey: deriveApiKey(Constants),
       }),
       method: "POST",
       signal: controller.signal,
@@ -1617,9 +1622,13 @@ export const albumSharesGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -1733,9 +1742,13 @@ export const albumsGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -1849,9 +1862,13 @@ export const mediaAssetsGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -1965,9 +1982,13 @@ export const parentBabyGET = async (Constants, _args, handlers, timeout) => {
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });
@@ -2081,9 +2102,13 @@ export const timelineEntriesGET = async (Constants, _args, handlers, timeout) =>
   try {
     const res = await fetch(url, {
       headers: cleanHeaders({
-        Authorization: Constants["AUTHORIZATION_HEADER"],
+        Accept: "application/json",
+        "Accept-Profile": Constants["Content-Profile"],
+        Authorization: deriveAuthorization(Constants),
+        "Content-Profile": Constants["Content-Profile"],
         "Content-Type": "application/json",
-        apikey: Constants["apiKey"],
+        Prefer: "return=representation",
+        apikey: deriveApiKey(Constants),
       }),
       signal: controller.signal,
     });

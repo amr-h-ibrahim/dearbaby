@@ -10,10 +10,12 @@ import * as StyleSheet from "../utils/StyleSheet";
 import useNavigation from "../utils/useNavigation";
 import useParams from "../utils/useParams";
 import useWindowDimensions from "../utils/useWindowDimensions";
+import { useRequireAuth } from "../utils/useAuthState";
 
 const TestDebugScreen = (props) => {
   const { theme } = props;
   const dimensions = useWindowDimensions();
+  useRequireAuth();
   const Constants = GlobalVariables.useValues();
   const Variables = Constants;
   const [FileName, setFileName] = React.useState("");

@@ -6,7 +6,7 @@ module.exports = {
     infoPlist: {},
     bundleIdentifier: "com.dearbaby.app",
     usesIcloudStorage: false,
-    buildNumber: "5",
+    buildNumber: "1",
     privacyManifests: {
       NSPrivacyAccessedAPITypes: [
         {
@@ -39,7 +39,7 @@ module.exports = {
   extra: {
     eas: {},
   },
-  scheme: "untitled-app",
+  scheme: "dearbaby",
   splash: {
     image: "./assets/app/splash.png",
     resizeMode: "cover",
@@ -49,7 +49,7 @@ module.exports = {
     package: "com.dearbaby.app",
     permissions: [],
     adaptiveIcon: {},
-    versionCode: 5,
+    versionCode: 1,
     blockedPermissions: [],
   },
   privacy: "unlisted",
@@ -65,7 +65,7 @@ module.exports = {
   androidStatusBar: {},
   userInterfaceStyle: "automatic",
   androidNavigationBar: {},
-  version: "1.0.5",
+  version: "1.0.0",
   assetBundlePatterns: ["**/*"],
   plugins: [
     [

@@ -12,6 +12,7 @@ import { Text, View } from "react-native";
 import * as GlobalStyles from "../GlobalStyles.js";
 import * as SupabaseDearBaby2Api from "../apis/SupabaseDearBaby2Api.js";
 import * as SupabaseDearBabyApi from "../apis/SupabaseDearBabyApi.js";
+import useMintView from "../apis/useMintView";
 import * as GlobalVariables from "../config/GlobalVariableContext";
 import Images from "../config/Images";
 import convert_to_JPEG from "../global-functions/convert_to_JPEG";
@@ -25,6 +26,7 @@ import imageSource from "../utils/imageSource";
 import openImagePickerUtil from "../utils/openImagePicker";
 import useNavigation from "../utils/useNavigation";
 import useWindowDimensions from "../utils/useWindowDimensions";
+import { resolveStorageUrl } from "../utils/storageUrlHelpers";
 
 const AvatarBlock = (props) => {
   const { theme } = props;
@@ -45,7 +47,7 @@ const AvatarBlock = (props) => {
   const supabaseDearBabyPATCHProfilePATCH = SupabaseDearBabyApi.usePATCHProfilePATCH();
   const supabaseDearBabyMintAvatarView$EdgeFunction$POST =
     SupabaseDearBabyApi.useMintAvatarView$EdgeFunction$POST();
-  const supabaseDearBabyMintViewPOST = SupabaseDearBabyApi.useMintViewPOST();
+  const { mutateAsync: mintViewAsync } = useMintView();
 
   return (
     <View style={StyleSheet.applyWidth({ alignItems: "center" }, dimensions.width)}>
@@ -77,7 +79,7 @@ const AvatarBlock = (props) => {
             try {
               console.log("Start ON_PRESS:0 OPEN_IMAGE_PICKER");
               const picker = await openImagePickerUtil({
-                mediaTypes: "Images",
+                mediaTypes: "images",
                 allowsEditing: true,
                 quality: 1,
                 allowsMultipleSelection: false,
@@ -149,14 +151,13 @@ const AvatarBlock = (props) => {
               setAvatarUrl("");
               console.log("Complete ON_PRESS:22 SET_VARIABLE");
               console.log("Start ON_PRESS:25 FETCH_REQUEST");
-              const viewResp = (
-                await supabaseDearBabyMintViewPOST.mutateAsync({
-                  object_key: patchResp && patchResp[0]?.avatar_object_key,
-                })
-              )?.json;
+              const viewResp = await mintViewAsync({
+                objectKey: patchResp && patchResp[0]?.avatar_object_key,
+              });
               console.log("Complete ON_PRESS:25 FETCH_REQUEST", { viewResp });
               console.log("Start ON_PRESS:26 SET_VARIABLE");
-              setAvatarUrl(viewResp?.url);
+              const mintedUrl = resolveStorageUrl(viewResp);
+              setAvatarUrl(mintedUrl ?? "");
               console.log("Complete ON_PRESS:26 SET_VARIABLE");
             } catch (err) {
               console.error(err);

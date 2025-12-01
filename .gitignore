@@ -13,3 +13,7 @@ web-report/
 .yarn/*
 !.yarn/releases/
 .metro-cache/
+.yarn/*
+!.yarn/releases/
+.metro-cache/
+.env

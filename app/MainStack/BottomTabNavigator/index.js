@@ -14,7 +14,7 @@ import {
   TextField,
   withTheme,
 } from '@draftbit/ui';
-import { ActivityIndicator, RefreshControl, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, RefreshControl, Text, View } from 'react-native';
 import { Fetch } from 'react-request';
 import * as GlobalStyles from '../../../GlobalStyles.js';
 import * as SupabaseDearBabyApi from '../../../apis/SupabaseDearBabyApi.js';
@@ -29,12 +29,14 @@ import useIsFocused from '../../../utils/useIsFocused';
 import useNavigation from '../../../utils/useNavigation';
 import useParams from '../../../utils/useParams';
 import useWindowDimensions from '../../../utils/useWindowDimensions';
+import { useRequireAuth } from '../../../utils/useAuthState';
 
 const defaultProps = { Name: '' };
 
 const HomeScreen = props => {
   const { theme } = props;
   const dimensions = useWindowDimensions();
+  useRequireAuth();
   const params = useParams();
   const Constants = GlobalVariables.useValues();
   const Variables = Constants;
@@ -128,26 +130,30 @@ const HomeScreen = props => {
                         onEndReachedThreshold={0.5}
                         pagingEnabled={false}
                         refreshControl={
-                          <RefreshControl
-                            refreshing={
-                              refreshingScrollViewSurfaceViewWhoAmICurrentUserEmail
-                            }
-                            onRefresh={() => {
-                              try {
-                                setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
-                                  true
-                                );
-                                /* 'Set Variable' action requires configuration: choose a variable */ setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
-                                  false
-                                );
-                              } catch (err) {
-                                console.error(err);
-                                setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
-                                  false
-                                );
-                              }
-                            }}
-                          />
+                          Platform.OS === 'web'
+                            ? undefined
+                            : (
+                                <RefreshControl
+                                  refreshing={
+                                    refreshingScrollViewSurfaceViewWhoAmICurrentUserEmail
+                                  }
+                                  onRefresh={() => {
+                                    try {
+                                      setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
+                                        true
+                                      );
+                                      /* 'Set Variable' action requires configuration: choose a variable */ setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
+                                        false
+                                      );
+                                    } catch (err) {
+                                      console.error(err);
+                                      setRefreshingScrollViewSurfaceViewWhoAmICurrentUserEmail(
+                                        false
+                                      );
+                                    }
+                                  }}
+                                />
+                              )
                         }
                         renderItem={({ item, index }) => {
                           const emailData = item;
@@ -426,7 +432,7 @@ const HomeScreen = props => {
                   {...GlobalStyles.ExpoImageStyles(theme)['Image (default)']
                     .props}
                   contentPosition={'center'}
-                  resizeMode={'center'}
+                  contentFit={'center'}
                   source={imageSource(`${listData}`)}
                   style={StyleSheet.applyWidth(
                     StyleSheet.compose(
@@ -481,7 +487,7 @@ const HomeScreen = props => {
               const handler = async () => {
                 try {
                   const response = await openImagePickerUtil({
-                    mediaTypes: 'Images',
+                    mediaTypes: 'images',
                     allowsEditing: true,
                     quality: 1,
                     allowsMultipleSelection: false,

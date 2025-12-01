@@ -8,15 +8,16 @@ export const DeviceVariables = {
   "db.refresh": "",
   "db.session": "",
   __env__: "Production",
+  remember_me: false,
+  saved_email: "",
+  saved_password: "",
 };
 export const AppVariables = {
   API_BASE_URL: "https://qiekucvzrkfhamhjrxtk.supabase.co/functions/v1/",
   apiKey:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpZWt1Y3Z6cmtmaGFtaGpyeHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NTE4NzAsImV4cCI6MjA3MDMyNzg3MH0.W4Ao53pY4sobecaG5kcfDgkn2BZ_Mr8ALs_1rgd4nsc",
-  AUTHORIZATION_HEADER:
-    "Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6IitIbjByQ2RmQWwvLzFlZmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FpZWt1Y3Z6cmtmaGFtaGpyeHRrLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJkMDUxZWVhMy1lNDJlLTRjZjktOWZiNy02ZGI2NWFhZjVlMzIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzYyNTExODAwLCJpYXQiOjE3NjI1MDgyMDAsImVtYWlsIjoiYW1yLmguaWJyYWhpbUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc2MjUwODIwMH1dLCJzZXNzaW9uX2lkIjoiODU4ZjZmZjAtMDVlNC00NWZmLWFjYjctN2Q3YWZhZmM3OWVhIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.fGUAcL31nWR1IuuRL5hjIkSP_Qm-HHH8NQnZNZU5LIc",
-  auth_token:
-    "eyJhbGciOiJIUzI1NiIsImtpZCI6IitIbjByQ2RmQWwvLzFlZmEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FpZWt1Y3Z6cmtmaGFtaGpyeHRrLnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJkMDUxZWVhMy1lNDJlLTRjZjktOWZiNy02ZGI2NWFhZjVlMzIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzYyNDY4OTU0LCJpYXQiOjE3NjI0NjUzNTQsImVtYWlsIjoiYW1yLmguaWJyYWhpbUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc2MjQ2NTM1NH1dLCJzZXNzaW9uX2lkIjoiMmE4NjdkNDItMzIwNC00ZDNlLWIxYjgtMTRhYmZiZDFjZmE2IiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.D4vPdGFI_D8xXRJdOfoCCaQgZ0GCG_RbQ5c1G_QqQGI",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpZWt1eXZrcmtmYW1oamhyeHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NTE4NzAsImV4cCI6MjA3MDMyNzg3MH0.W4Ao53pY4sobecaG5kcfDgkn2BZ_Mr8ALs_1rgd4nsc",
+  AUTHORIZATION_HEADER: "",
+  auth_token: "",
   BUILD_VERSION: "0.0.1",
   "Content-Profile": "dearbaby",
   refresh_token: "",
@@ -25,7 +26,8 @@ export const AppVariables = {
   SUPABASE_ANON_KEY:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpZWt1Y3Z6cmtmaGFtaGpyeHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NTE4NzAsImV4cCI6MjA3MDMyNzg3MH0.W4Ao53pY4sobecaG5kcfDgkn2BZ_Mr8ALs_1rgd4nsc",
   SUPABASE_URL: "https://qiekucvzrkfhamhjrxtk.supabase.co/",
-  user_id: "d051eea3-e42e-4cf9-9fb7-6db65aaf5e32",
+  user_id: "",
+  hasSentWelcomeEmail: false,
 };
 const GlobalVariableContext = React.createContext();
 const GlobalVariableUpdater = React.createContext();
@@ -168,6 +170,12 @@ export function GlobalVariableProvider({ children }) {
       syncToAsyncStorage();
     }
   }, [state]);
+
+  React.useEffect(() => {
+    if (typeof globalThis !== "undefined") {
+      globalThis.__draftbitGlobalValues = state.values;
+    }
+  }, [state.values]);
 
   const onLayoutRootView = React.useCallback(async () => {
     if (state.__loaded) {

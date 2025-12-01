@@ -1,9 +1,46 @@
-import { Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import assetToBase64 from "./assetToBase64";
 
+const normalizeMediaTypes = (input) => {
+  const toArray = (value) => (Array.isArray(value) ? value : [value]);
+  const resolveSingle = (value) => {
+    if (!value) {
+      return ["images"];
+    }
+
+    if (value === ImagePicker.MediaTypeOptions.All || value === "All" || value === "all") {
+      return ["images", "videos"];
+    }
+
+    if (value === ImagePicker.MediaTypeOptions.Images || value === "Images" || value === "images") {
+      return ["images"];
+    }
+
+    if (value === ImagePicker.MediaTypeOptions.Videos || value === "Videos" || value === "videos") {
+      return ["videos"];
+    }
+
+    if (typeof value === "string") {
+      const lower = value.toLowerCase();
+      if (lower === "livephotos" || lower === "live_photos") {
+        return ["livePhotos"];
+      }
+    }
+
+    return [value];
+  };
+
+  const all = toArray(input).flatMap(resolveSingle).filter(Boolean);
+  if (!all.length) {
+    return "images";
+  }
+
+  const unique = Array.from(new Set(all));
+  return unique.length === 1 ? unique[0] : unique;
+};
+
 async function openImagePicker({
-  mediaTypes = ImagePicker.MediaTypeOptions.Images,
+  mediaTypes = "images",
   allowsEditing = false,
   quality = 1,
   allowsMultipleSelection = false,
@@ -11,7 +48,7 @@ async function openImagePicker({
   outputBase64 = true,
 }) {
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes,
+    mediaTypes: normalizeMediaTypes(mediaTypes),
     allowsEditing,
     quality,
     allowsMultipleSelection,

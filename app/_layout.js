@@ -1,6 +1,6 @@
 import React from "react";
-import { Icon, Provider as ThemeProvider, Touchable, useTheme } from "@draftbit/ui";
-import { useFonts } from "expo-font";
+import { Icon, Provider as ThemeProvider, useTheme } from "@draftbit/ui";
+import * as Font from "expo-font";
 import * as Notifications from "expo-notifications";
 import { Stack } from "expo-router/stack";
 import * as SplashScreen from "expo-splash-screen";
@@ -34,6 +34,7 @@ import palettes from "../themes/palettes";
 import Breakpoints from "../utils/Breakpoints";
 import useNavigation from "../utils/useNavigation";
 import useWindowDimensions from "../utils/useWindowDimensions";
+import AuthDeepLinkHandler from "../components/AuthDeepLinkHandler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -46,6 +47,88 @@ Notifications.setNotificationHandler({
 });
 
 const queryClient = new QueryClient();
+
+const FONT_RESOURCES = {
+  Inter_400Regular: Fonts.Inter_400Regular,
+  Inter_500Medium: Fonts.Inter_500Medium,
+  Inter_600SemiBold: Fonts.Inter_600SemiBold,
+  Inter_700Bold: Fonts.Inter_700Bold,
+  InterTight_400Regular: Fonts.InterTight_400Regular,
+  Poppins_400Regular: Fonts.Poppins_400Regular,
+  Poppins_600SemiBold: Fonts.Poppins_600SemiBold,
+};
+
+const isFontTimeoutError = (error) =>
+  typeof error?.message === "string" && /timeout exceeded/i.test(error.message);
+
+const waitFor = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function loadFontWithRetry(fontFamily, source, { maxAttempts = 2, retryDelay = 400 } = {}) {
+  let attempt = 0;
+  while (attempt <= maxAttempts) {
+    try {
+      await Font.loadAsync(fontFamily, source);
+      return;
+    } catch (error) {
+      if (!isFontTimeoutError(error) || attempt >= maxAttempts) {
+        throw error;
+      }
+
+      const retryCount = attempt + 1;
+      console.warn(
+        `[fonts] Timeout loading "${fontFamily}", retrying (${retryCount + 1}/${maxAttempts + 1})`,
+      );
+      await waitFor(retryDelay);
+      attempt += 1;
+    }
+  }
+}
+
+function useAppFonts() {
+  const [loaded, setLoaded] = React.useState(false);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    let isMounted = true;
+
+    const loadFontsAsync = async () => {
+      const entries = Object.entries(FONT_RESOURCES);
+
+      for (const [fontFamily, source] of entries) {
+        const normalizedSource =
+          typeof source === "object" && source !== null && "uri" in source
+            ? { ...source, display: source.display || Font.FontDisplay.FALLBACK }
+            : source;
+
+        try {
+          await loadFontWithRetry(fontFamily, normalizedSource, {
+            maxAttempts: 2,
+            retryDelay: 600,
+          });
+        } catch (fontError) {
+          if (!isMounted) {
+            return;
+          }
+
+          console.warn(`[fonts] Failed to load "${fontFamily}"`, fontError);
+          setError((prev) => prev ?? fontError);
+        }
+      }
+
+      if (isMounted) {
+        setLoaded(true);
+      }
+    };
+
+    loadFontsAsync();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return { loaded, error };
+}
 
 // On web, Appearance.setColorScheme is not implemented
 // See https://github.com/necolas/react-native-web/issues/2703
@@ -114,15 +197,13 @@ const styles = StyleSheet.create({});
 const App = () => {
   const [areAssetsCached, setAreAssetsCached] = React.useState(false);
 
-  const [fontsLoaded] = useFonts({
-    Inter_400Regular: Fonts.Inter_400Regular,
-    Inter_500Medium: Fonts.Inter_500Medium,
-    Inter_600SemiBold: Fonts.Inter_600SemiBold,
-    Inter_700Bold: Fonts.Inter_700Bold,
-    InterTight_400Regular: Fonts.InterTight_400Regular,
-    Poppins_400Regular: Fonts.Poppins_400Regular,
-    Poppins_600SemiBold: Fonts.Poppins_600SemiBold,
-  });
+  const { loaded: fontsLoaded, error: fontsError } = useAppFonts();
+
+  React.useEffect(() => {
+    if (fontsError) {
+      console.warn("[fonts] Continuing with fallback fonts due to load error.", fontsError);
+    }
+  }, [fontsError]);
 
   React.useEffect(() => {
     async function prepare() {
@@ -186,58 +267,53 @@ const App = () => {
             <GlobalVariables.GlobalVariableProvider>
               <QueryClientProvider client={queryClient}>
                 <GestureHandlerRootView style={{ flex: 1 }}>
-                  <Stack
-                    screenOptions={{
-                      cardStyle: { flex: 1 },
-                      gestureEnabled: false,
-                      headerBackImage: Platform.OS === "android" ? DefaultAndroidBackIcon : null,
-                      headerMode: "none",
-                      headerShown: false,
-                    }}
-                    initialRouteName={"index"}
-                  >
-                    <Stack.Screen
-                      name="index"
-                      options={{
+                  <AuthDeepLinkHandler>
+                    <Stack
+                      screenOptions={{
+                        cardStyle: { flex: 1 },
+                        gestureEnabled: false,
+                        headerBackImage: Platform.OS === "android" ? DefaultAndroidBackIcon : null,
+                        headerMode: "none",
                         headerShown: false,
-                        title: "AppInit",
                       }}
-                    />
+                      initialRouteName={"index"}
+                    >
+                      <Stack.Screen
+                        name="index"
+                        options={{
+                          headerShown: false,
+                          title: "Login",
+                        }}
+                      />
 
-                    <Stack.Screen
-                      name="ProfileScreen"
-                      options={{
-                        title: "Profile",
-                      }}
-                    />
+                      <Stack.Screen
+                        name="ProfileScreen"
+                        options={{
+                          title: "Profile",
+                        }}
+                      />
 
-                    <Stack.Screen
-                      name="SignUpScreen"
-                      options={{
-                        title: "Sign up",
-                      }}
-                    />
+                      <Stack.Screen
+                        name="TestDebugScreen"
+                        options={{
+                          title: "Test_Debug",
+                        }}
+                      />
 
-                    <Stack.Screen
-                      name="TestDebugScreen"
-                      options={{
-                        title: "Test_Debug",
-                      }}
-                    />
-
-                    <Stack.Screen
-                      name="MainStack"
-                      options={{
-                        title: "MainStack",
-                      }}
-                    />
-                    <Stack.Screen
-                      name="AuthStack"
-                      options={{
-                        title: "AuthStack",
-                      }}
-                    />
-                  </Stack>
+                      <Stack.Screen
+                        name="MainStack"
+                        options={{
+                          title: "MainStack",
+                        }}
+                      />
+                      <Stack.Screen
+                        name="AuthStack"
+                        options={{
+                          title: "AuthStack",
+                        }}
+                      />
+                    </Stack>
+                  </AuthDeepLinkHandler>
                 </GestureHandlerRootView>
               </QueryClientProvider>
             </GlobalVariables.GlobalVariableProvider>

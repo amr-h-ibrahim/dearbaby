@@ -1,0 +1,37 @@
+diff --git a/node_modules/expo-font/build/ExpoFontLoader.web.js b/node_modules/expo-font/build/ExpoFontLoader.web.js
+index 58168d3855c43597edb21cb6c1822fa3f79fd7b8..bfc11cc391a74fbce5ab699efd10cfb295215676 100644
+--- a/node_modules/expo-font/build/ExpoFontLoader.web.js
++++ b/node_modules/expo-font/build/ExpoFontLoader.web.js
+@@ -1,6 +1,8 @@
+ import { CodedError, Platform } from 'expo-modules-core';
+ import FontObserver from 'fontfaceobserver';
+ import { FontDisplay } from './Font.types';
++const FONT_OBSERVER_TIMEOUT_MS = 15000;
++const isFontTimeoutError = (error) => typeof (error === null || error === void 0 ? void 0 : error.message) === 'string' && /timeout exceeded/i.test(error.message);
+ function getFontFaceStyleSheet() {
+     if (!Platform.isDOMAvailable) {
+         return null;
+@@ -131,7 +133,15 @@
+         if (!isFontLoadingListenerSupported()) {
+             return Promise.resolve();
+         }
+-        return new FontObserver(fontFamilyName, { display: resource.display }).load(null, 6000);
++        return new FontObserver(fontFamilyName, { display: resource.display })
++            .load(null, FONT_OBSERVER_TIMEOUT_MS)
++            .catch((error) => {
++            if (isFontTimeoutError(error)) {
++                console.warn(`[expo-font] FontFaceObserver timed out after ${FONT_OBSERVER_TIMEOUT_MS}ms for "${fontFamilyName}". Rendering will continue with fallback fonts while the custom font finishes loading.`);
++                return;
++            }
++            throw error;
++        });
+     },
+ };
+ const ID = 'expo-generated-fonts';
+@@ -178,4 +188,4 @@
+     const isFirefox = userAgent.includes('Firefox');
+     return !isSafari && !isIOS && !isEdge && !isIE && !isFirefox;
+ }
+-//# sourceMappingURL=ExpoFontLoader.web.js.map
+\ No newline at end of file
++//# sourceMappingURL=ExpoFontLoader.web.js.map

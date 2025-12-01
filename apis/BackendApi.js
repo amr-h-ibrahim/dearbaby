@@ -22,15 +22,21 @@ export const mintUploadPOST = async (Constants, _args, handlers, timeout) => {
     }, timeout);
   }
   try {
+    if (!Constants?.auth_token) {
+      throw new Error("Missing auth token for mint-upload");
+    }
     const res = await fetch(url, {
       body: JSON.stringify({
-        contentType: "image/jpeg",
-        size: 0,
+        target: "media",
+        babyId: null,
         albumId: null,
-        extension: "jpg",
+        mimeType: "image/jpeg",
+        bytes: 0,
+        filename: `upload-${Date.now()}.jpg`,
       }),
       headers: cleanHeaders({
-        Authorization: "Bearer {{appVars.auth_token}}",
+        Accept: "application/json",
+        Authorization: `Bearer ${Constants["auth_token"]}`,
         "Content-Type": "application/json",
       }),
       method: "POST",
