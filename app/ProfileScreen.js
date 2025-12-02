@@ -1047,7 +1047,12 @@ const ProfileScreen = (props) => {
   }, [avatar_object_key, mintBabyAvatar, withCacheBust]);
 
   return (
-    <ScreenContainer hasSafeArea={false} scrollable={false} hasTopSafeArea={true}>
+    <ScreenContainer
+      hasSafeArea={false}
+      scrollable={false}
+      hasTopSafeArea={true}
+      style={{ backgroundColor: "#FFF7F8" }}
+    >
       {/* Header */}
       <View
         style={StyleSheet.applyWidth(
@@ -1060,8 +1065,8 @@ const ProfileScreen = (props) => {
           selectable={false}
           style={StyleSheet.applyWidth(
             {
-              color: theme.colors.text.strong,
-              fontFamily: "Inter_500Medium",
+              color: "#2C2C2C",
+              fontFamily: "Inter_600SemiBold",
               fontSize: 24,
             },
             dimensions.width,
@@ -1078,14 +1083,30 @@ const ProfileScreen = (props) => {
         showsHorizontalScrollIndicator={true}
         showsVerticalScrollIndicator={true}
         style={StyleSheet.applyWidth(
-          { flex: 1, marginBottom: 20, paddingBottom: 25 },
+          { flex: 1, marginBottom: 20, paddingBottom: 25, backgroundColor: "#FFF7F8" },
           dimensions.width,
         )}
       >
         {/* User Details */}
         <View
           style={StyleSheet.applyWidth(
-            { flex: 1, justifyContent: "center", minHeight: 200 },
+            {
+              flex: 1,
+              justifyContent: "center",
+              minHeight: 200,
+              backgroundColor: "#FFFFFF",
+              borderRadius: 32,
+              marginHorizontal: 20,
+              marginTop: 10,
+              paddingTop: 36,
+              paddingBottom: 36,
+              paddingHorizontal: 28,
+              shadowColor: "#000000",
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 4,
+            },
             dimensions.width,
           )}
         >
@@ -1245,6 +1266,13 @@ const ProfileScreen = (props) => {
                     height: 120,
                     width: 120,
                     overflow: "hidden",
+                    borderWidth: 4,
+                    borderColor: "#C7CEEA",
+                    shadowColor: "#C7CEEA",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.3,
+                    shadowRadius: 10,
+                    elevation: 3,
                   },
                   dimensions.width,
                 )}
@@ -1525,14 +1553,14 @@ const ProfileScreen = (props) => {
           </View>
           {/* Display Name and Phone */}
           <View
-            style={StyleSheet.applyWidth({ alignItems: "center", marginTop: 8 }, dimensions.width)}
+            style={StyleSheet.applyWidth({ alignItems: "center", marginTop: 16 }, dimensions.width)}
           >
             <Text
               accessible={true}
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: theme.colors.text.strong,
+                  color: "#2C2C2C",
                   fontFamily: "Inter_600SemiBold",
                   fontSize: 20,
                   textAlign: "center",
@@ -1548,7 +1576,7 @@ const ProfileScreen = (props) => {
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.medium,
+                    color: "#7A7A7A",
                     fontFamily: "Inter_400Regular",
                     fontSize: 14,
                     marginTop: 4,
@@ -1693,9 +1721,9 @@ const ProfileScreen = (props) => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: theme.colors.text.strong,
+                  color: "#7A7A7A",
                   fontFamily: "Inter_400Regular",
-                  fontSize: 14,
+                  fontSize: 13,
                   marginTop: 12,
                   textAlign: "center",
                 },
@@ -1712,11 +1740,11 @@ const ProfileScreen = (props) => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: theme.colors.text.strong,
+                  color: "#7A7A7A",
                   fontFamily: "Inter_400Regular",
                   fontSize: 10,
                   marginTop: 4,
-                  opacity: 0.4,
+                  opacity: 0.5,
                   textAlign: "center",
                 },
                 dimensions.width,
@@ -1731,16 +1759,16 @@ const ProfileScreen = (props) => {
               style={StyleSheet.applyWidth(
                 {
                   backgroundColor: "#FFFFFF",
-                  borderRadius: 20,
-                  marginHorizontal: 16,
+                  borderRadius: 32,
+                  marginHorizontal: 20,
                   marginTop: 24,
                   marginBottom: 8,
-                  padding: 20,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
+                  padding: 28,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 6 },
                   shadowOpacity: 0.08,
-                  shadowRadius: 12,
-                  elevation: 3,
+                  shadowRadius: 16,
+                  elevation: 4,
                 },
                 dimensions.width,
               )}
@@ -1751,7 +1779,7 @@ const ProfileScreen = (props) => {
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: palettes.Socialize.primary0A84FF,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_600SemiBold",
                     fontSize: 18,
                     marginBottom: 8,
@@ -1766,7 +1794,7 @@ const ProfileScreen = (props) => {
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.medium,
+                    color: "#7A7A7A",
                     fontFamily: "Inter_400Regular",
                     fontSize: 14,
                     lineHeight: 20,
@@ -1944,12 +1972,11 @@ const ProfileScreen = (props) => {
           <View
             style={StyleSheet.applyWidth(
               {
-                borderColor: palettes.App.Peoplebit_Light_Gray,
-                borderTopWidth: 2,
                 flexGrow: 0,
                 flexShrink: 0,
-                paddingLeft: 16,
-                paddingRight: 16,
+                paddingLeft: 20,
+                paddingRight: 20,
+                marginTop: 8,
               },
               dimensions.width,
             )}
@@ -1960,8 +1987,8 @@ const ProfileScreen = (props) => {
                   alignItems: "center",
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  marginTop: 14,
-                  marginBottom: 8,
+                  marginTop: 24,
+                  marginBottom: 12,
                 },
                 dimensions.width,
               )}
@@ -1971,9 +1998,9 @@ const ProfileScreen = (props) => {
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: palettes.App.Peoplebit_Salmon_Red,
+                    color: "#FF9AA2",
                     fontFamily: "Inter_600SemiBold",
-                    fontSize: 14,
+                    fontSize: 16,
                     letterSpacing: 1.2,
                     textTransform: "uppercase",
                   },
@@ -2050,15 +2077,10 @@ const ProfileScreen = (props) => {
         <View
           style={StyleSheet.applyWidth(
             {
-              backgroundColor: palettes.App["Custom #ffffff"],
-              borderRadius: 12,
               marginBottom: 20,
               marginLeft: 20,
               marginRight: 20,
-              paddingBottom: 10,
-              paddingLeft: 20,
-              paddingRight: 20,
-              paddingTop: 10,
+              gap: 12,
             },
             dimensions.width,
           )}
@@ -2067,26 +2089,32 @@ const ProfileScreen = (props) => {
           <Touchable activeOpacity={0.8} disabledOpacity={0.8}>
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
-              <Icon
-                size={24}
-                color={theme.colors.text.strong}
-                name={"Ionicons/location-outline"}
-                style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-              />
+              <Icon size={24} color={"#B5EAD7"} name={"Ionicons/location-outline"} />
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: 0.8,
+                    marginLeft: 14,
                   },
                   dimensions.width,
                 )}
@@ -2099,26 +2127,32 @@ const ProfileScreen = (props) => {
           <Touchable activeOpacity={0.8} disabledOpacity={0.8}>
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
-              <Icon
-                size={24}
-                color={theme.colors.text.strong}
-                name={"Ionicons/wallet-outline"}
-                style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-              />
+              <Icon size={24} color={"#C7CEEA"} name={"Ionicons/wallet-outline"} />
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: 0.8,
+                    marginLeft: 14,
                   },
                   dimensions.width,
                 )}
@@ -2131,26 +2165,32 @@ const ProfileScreen = (props) => {
           <Touchable activeOpacity={0.8} disabledOpacity={0.8}>
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
-              <Icon
-                size={24}
-                color={theme.colors.text.strong}
-                name={"MaterialCommunityIcons/security"}
-                style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-              />
+              <Icon size={24} color={"#0A84FF"} name={"MaterialCommunityIcons/security"} />
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: 0.8,
+                    marginLeft: 14,
                   },
                   dimensions.width,
                 )}
@@ -2163,26 +2203,32 @@ const ProfileScreen = (props) => {
           <Touchable activeOpacity={0.8} disabledOpacity={0.8}>
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
-              <Icon
-                size={24}
-                color={theme.colors.text.strong}
-                name={"Entypo/text-document"}
-                style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-              />
+              <Icon size={24} color={"#FF9AA2"} name={"Entypo/text-document"} />
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: 0.8,
+                    marginLeft: 14,
                   },
                   dimensions.width,
                 )}
@@ -2195,26 +2241,32 @@ const ProfileScreen = (props) => {
           <Touchable activeOpacity={0.8} disabledOpacity={0.8}>
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
-              <Icon
-                size={24}
-                color={theme.colors.text.strong}
-                name={"AntDesign/contacts"}
-                style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-              />
+              <Icon size={24} color={"#B5EAD7"} name={"AntDesign/contacts"} />
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: 0.8,
+                    marginLeft: 14,
                   },
                   dimensions.width,
                 )}
@@ -2232,30 +2284,37 @@ const ProfileScreen = (props) => {
           >
             <View
               style={StyleSheet.applyWidth(
-                { alignItems: "center", flexDirection: "row", height: 60 },
+                {
+                  alignItems: "center",
+                  flexDirection: "row",
+                  height: 60,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  paddingHorizontal: 20,
+                  shadowColor: "#000000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.04,
+                  shadowRadius: 8,
+                  elevation: 2,
+                },
                 dimensions.width,
               )}
             >
               {isLoggingOut ? (
-                <ActivityIndicator size="small" color={theme.colors.text.strong} />
+                <ActivityIndicator size="small" color={"#FF9AA2"} />
               ) : (
-                <Icon
-                  size={24}
-                  color={theme.colors.text.strong}
-                  name={"AntDesign/logout"}
-                  style={StyleSheet.applyWidth({ opacity: 0.6 }, dimensions.width)}
-                />
+                <Icon size={24} color={"#FF9AA2"} name={"AntDesign/logout"} />
               )}
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: theme.colors.text.strong,
+                    color: "#2C2C2C",
                     fontFamily: "Inter_500Medium",
                     fontSize: 15,
-                    marginLeft: 10,
-                    opacity: isLoggingOut ? 0.5 : 0.8,
+                    marginLeft: 14,
+                    opacity: isLoggingOut ? 0.6 : 1,
                   },
                   dimensions.width,
                 )}

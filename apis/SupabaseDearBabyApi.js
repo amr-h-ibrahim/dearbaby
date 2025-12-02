@@ -2016,7 +2016,7 @@ export const useAlbumsInsertPOST = (initialArgs = {}, { handlers = {} } = {}) =>
 
 export const albumsGET = async (
   Constants,
-  { album_id, baby_id, created_by, select, limit, order } = {},
+  { album_id, baby_id, created_by, select, limit, order, ...additionalParams } = {},
   handlers,
   timeout,
 ) => {
@@ -2037,6 +2037,12 @@ export const albumsGET = async (
   if (order) {
     paramsDict["order"] = order;
   }
+  // Add any additional query parameters (like media_assets.status, media_assets.deleted_at)
+  Object.entries(additionalParams).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && `${value}` !== "") {
+      paramsDict[key] = `${value}`;
+    }
+  });
   const url = `https://qiekucvzrkfhamhjrxtk.supabase.co/rest/v1/albums${renderQueryString(
     paramsDict,
   )}`;
@@ -2432,7 +2438,7 @@ export const FetchGetProfileGET = ({
 
 export const mediaAssetsGET = async (
   Constants,
-  { baby_id, album_id, select, limit, order } = {},
+  { baby_id, album_id, select, limit, order, status, deleted_at } = {},
   handlers,
   timeout,
 ) => {
@@ -2443,6 +2449,12 @@ export const mediaAssetsGET = async (
   }
   if (album_id !== undefined && album_id !== null && `${album_id}` !== "") {
     paramsDict["album_id"] = `eq.${renderParam(album_id)}`;
+  }
+  if (status !== undefined && status !== null && `${status}` !== "") {
+    paramsDict["status"] = `${status}`;
+  }
+  if (deleted_at !== undefined && deleted_at !== null && `${deleted_at}` !== "") {
+    paramsDict["deleted_at"] = `${deleted_at}`;
   }
   if (limit !== undefined && limit !== null && !Number.isNaN(limit)) {
     paramsDict["limit"] = `${limit}`;

@@ -242,6 +242,8 @@ const BabyProfileScreen = (props) => {
       order: "created_at.desc",
       select:
         "album_id,title,description_md,created_at,baby_id,created_by,cover_media_id,media_assets(count)",
+      "media_assets.status": "eq.uploaded",
+      "media_assets.deleted_at": "is.null",
     };
   }, [babyIdFromParams]);
   const albumsQueryKey = React.useMemo(() => ["Get current users", albumArgs], [albumArgs]);
@@ -276,6 +278,8 @@ const BabyProfileScreen = (props) => {
     }
     return {
       baby_id: babyIdFromParams,
+      status: "eq.uploaded",
+      deleted_at: "is.null",
       select: "media_id",
     };
   }, [babyIdFromParams]);
@@ -2056,26 +2060,33 @@ const BabyProfileScreen = (props) => {
   ]);
 
   const surfaceBaseStyle = StyleSheet.compose(GlobalStyles.SurfaceStyles(theme)["Surface"].style, {
-    backgroundColor: theme.colors.background.base,
-    borderRadius: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 32,
     marginHorizontal: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 24,
+    paddingHorizontal: 28,
+    paddingVertical: 32,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
   });
 
-  const headlineStyle = StyleSheet.compose(
-    GlobalStyles.TextStyles(theme)["Text 2"].style,
-    theme.typography.headline6,
-  );
+  const headlineStyle = StyleSheet.compose(GlobalStyles.TextStyles(theme)["Text 2"].style, {
+    ...theme.typography.headline6,
+    color: "#2C2C2C",
+    fontFamily: "Inter_600SemiBold",
+    fontSize: 18,
+  });
 
-  const bodyStyle = StyleSheet.compose(
-    GlobalStyles.TextStyles(theme)["Text 2"].style,
-    theme.typography.body1,
-  );
+  const bodyStyle = StyleSheet.compose(GlobalStyles.TextStyles(theme)["Text 2"].style, {
+    ...theme.typography.body1,
+    color: "#2C2C2C",
+  });
 
   const secondaryTextStyle = StyleSheet.compose(GlobalStyles.TextStyles(theme)["Text 2"].style, {
     ...theme.typography.caption,
-    color: theme.colors.text.medium,
+    color: "#7A7A7A",
   });
 
   const errorTextStyle = StyleSheet.compose(bodyStyle, {
@@ -2099,7 +2110,7 @@ const BabyProfileScreen = (props) => {
   const remindersHasError = hasResponseError(remindersData) || !!remindersError;
 
   return (
-    <ScreenContainer hasSafeArea scrollable={false}>
+    <ScreenContainer hasSafeArea scrollable={false} style={{ backgroundColor: "#FFF7F8" }}>
       <SimpleStyleScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -2107,7 +2118,10 @@ const BabyProfileScreen = (props) => {
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           )
         }
-        style={StyleSheet.applyWidth({ paddingBottom: 32 }, dimensions.width)}
+        style={StyleSheet.applyWidth(
+          { paddingBottom: 32, backgroundColor: "#FFF7F8" },
+          dimensions.width,
+        )}
       >
         <Spacer top={24} right={0} bottom={0} left={0} />
         <Surface elevation={1} style={StyleSheet.applyWidth(surfaceBaseStyle, dimensions.width)}>
@@ -2190,7 +2204,7 @@ const BabyProfileScreen = (props) => {
                 style={StyleSheet.applyWidth(
                   {
                     alignItems: "center",
-                    marginBottom: 20,
+                    marginBottom: 24,
                   },
                   dimensions.width,
                 )}
@@ -2205,12 +2219,19 @@ const BabyProfileScreen = (props) => {
                     style={StyleSheet.applyWidth(
                       {
                         alignItems: "center",
-                        backgroundColor: theme.colors.branding.secondary,
-                        borderRadius: 60,
-                        height: 120,
+                        backgroundColor: "#C7CEEA",
+                        borderRadius: 75,
+                        height: 150,
                         justifyContent: "center",
                         overflow: "hidden",
-                        width: 120,
+                        width: 150,
+                        borderWidth: 5,
+                        borderColor: "#FFFFFF",
+                        shadowColor: "#C7CEEA",
+                        shadowOffset: { width: 0, height: 8 },
+                        shadowOpacity: 0.4,
+                        shadowRadius: 20,
+                        elevation: 6,
                       },
                       dimensions.width,
                     )}
@@ -2223,8 +2244,8 @@ const BabyProfileScreen = (props) => {
                         source={{ uri: avatarUrl }}
                         style={StyleSheet.applyWidth(
                           {
-                            height: 120,
-                            width: 120,
+                            height: 150,
+                            width: 150,
                           },
                           dimensions.width,
                         )}
@@ -2232,8 +2253,8 @@ const BabyProfileScreen = (props) => {
                     ) : (
                       <Icon
                         name="MaterialCommunityIcons/baby-face-outline"
-                        color={theme.colors.text.light}
-                        size={58}
+                        color={"#FFFFFF"}
+                        size={70}
                       />
                     )}
                     {isUploadingAvatar ? (
@@ -2349,13 +2370,12 @@ const BabyProfileScreen = (props) => {
                   >
                     <Text
                       style={StyleSheet.applyWidth(
-                        StyleSheet.compose(
-                          GlobalStyles.TextStyles(theme)["Text 2"].style,
-                          theme.typography.headline5,
-                          {
-                            color: theme.colors.branding.primary,
-                          },
-                        ),
+                        StyleSheet.compose(GlobalStyles.TextStyles(theme)["Text 2"].style, {
+                          ...theme.typography.headline5,
+                          color: "#0A84FF",
+                          fontSize: 28,
+                          fontFamily: "Inter_600SemiBold",
+                        }),
                         dimensions.width,
                       )}
                     >
@@ -2396,13 +2416,14 @@ const BabyProfileScreen = (props) => {
                 style={StyleSheet.applyWidth(
                   {
                     ...secondaryTextStyle,
-                    fontSize: 13,
+                    fontSize: 14,
                     marginBottom: 16,
+                    lineHeight: 20,
                   },
                   dimensions.width,
                 )}
               >
-                Who can add memories and see this little world.
+                Share this magical little world with your loved ones.
               </Text>
 
               {/* Members List */}
@@ -2531,8 +2552,11 @@ const BabyProfileScreen = (props) => {
                 style={StyleSheet.applyWidth(
                   {
                     backgroundColor: "#0A84FF",
-                    borderRadius: 24,
-                    height: 48,
+                    borderRadius: 99,
+                    fontFamily: "Inter_600SemiBold",
+                    fontSize: 16,
+                    height: 56,
+                    textAlign: "center",
                   },
                   dimensions.width,
                 )}
@@ -2576,17 +2600,26 @@ const BabyProfileScreen = (props) => {
                   {
                     alignItems: "center",
                     alignSelf: "flex-end",
-                    backgroundColor: pressed || hovered ? "#EAF3FF" : "#FFFFFF",
-                    borderColor: "#E5E5EA",
-                    borderRadius: 12,
-                    borderWidth: 1,
+                    backgroundColor: showAlbumComposer
+                      ? pressed || hovered
+                        ? "#F0F0F0"
+                        : "#FAFAFA"
+                      : pressed || hovered
+                        ? "#0066CC"
+                        : "#0A84FF",
+                    borderRadius: 99,
                     flexDirection: "row",
                     justifyContent: "center",
-                    minHeight: 36,
-                    maxHeight: 36,
+                    minHeight: 40,
+                    maxHeight: 40,
                     opacity: isCreatingAlbum && !showAlbumComposer ? 0.5 : 1,
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
+                    paddingHorizontal: 20,
+                    paddingVertical: 10,
+                    shadowColor: showAlbumComposer ? "transparent" : "#0A84FF",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 4,
+                    elevation: showAlbumComposer ? 0 : 2,
                   },
                   dimensions.width,
                 )
@@ -2599,16 +2632,15 @@ const BabyProfileScreen = (props) => {
                     : "MaterialCommunityIcons/folder-plus"
                 }
                 size={16}
-                color="#0A84FF"
+                color={showAlbumComposer ? "#666666" : "#FFFFFF"}
                 style={{ marginRight: 8 }}
               />
               <Text
                 style={StyleSheet.applyWidth(
                   {
-                    color: "#0A84FF",
-                    fontFamily: "Inter_500Medium",
+                    color: showAlbumComposer ? "#666666" : "#FFFFFF",
+                    fontFamily: "Inter_600SemiBold",
                     fontSize: 14,
-                    fontWeight: "500",
                   },
                   dimensions.width,
                 )}

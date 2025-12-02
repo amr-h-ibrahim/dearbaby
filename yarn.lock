@@ -4780,20 +4780,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:^1.7.3":
-  version: 1.7.3
-  resolution: "@shopify/flash-list@npm:1.7.3"
-  dependencies:
-    recyclerlistview: "npm:4.2.1"
-    tslib: "npm:2.8.1"
-  peerDependencies:
-    "@babel/runtime": "*"
-    react: "*"
-    react-native: "*"
-  checksum: 10c0/84aa7c87f39114c98374072609ea61eec3aecee3c8dc55220f114949897b25ff6b6bc1edf14161b0feead6e6c7f3845d6b0af0d8f300df319f45e3c5f4be3e15
-  languageName: node
-  linkType: hard
-
 "@shopify/mime-types@npm:^2.1.0":
   version: 2.3.0
   resolution: "@shopify/mime-types@npm:2.3.0"
@@ -6778,7 +6764,7 @@ __metadata:
     "@rn-primitives/toggle": "npm:^1.2.0"
     "@rn-primitives/toggle-group": "npm:^1.2.0"
     "@rn-primitives/tooltip": "npm:^1.2.0"
-    "@shopify/flash-list": "npm:^1.7.3"
+    "@shopify/flash-list": "npm:1.7.1"
     "@shopify/mime-types": "npm:^2.1.0"
     "@types/react": "npm:~18.3.12"
     class-variance-authority: "npm:^0.7.1"
@@ -14354,7 +14340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.8.1, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.1.0":
+"tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.1.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62

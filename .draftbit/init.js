@@ -1,3 +1,4 @@
+/* eslint-disable */
 import "../global.css";
 
 if (require("react-native").Platform.OS === "web" && typeof window !== "undefined") {

@@ -175,7 +175,23 @@ const AuthSignupScreen = (props) => {
   };
 
   return (
-    <ScreenContainer scrollable={true} hasSafeArea={true} style={{ backgroundColor: "#ffffff" }}>
+    <ScreenContainer
+      scrollable={true}
+      hasSafeArea={true}
+      style={{ backgroundColor: "transparent" }}
+    >
+      {/* Soft pastel background */}
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "#FFF7F8",
+        }}
+      />
+
       <View
         style={{
           alignItems: "center",
@@ -185,24 +201,22 @@ const AuthSignupScreen = (props) => {
           paddingRight: 24,
           paddingTop: 40,
           paddingBottom: 40,
-          backgroundColor: "#ffffff",
         }}
       >
-        {/* Logo */}
-        <ExpoImage
-          allowDownscaling={true}
-          cachePolicy={"disk"}
-          contentPosition={"center"}
-          contentFit={"cover"}
-          transitionDuration={300}
-          transitionEffect={"cross-dissolve"}
-          transitionTiming={"ease-in-out"}
-          source={imageSource(Images["BigLogo"])}
-          style={StyleSheet.applyWidth(
-            { height: 100, width: 100, marginBottom: 16 },
-            dimensions.width,
-          )}
-        />
+        {/* Logo - Updated to DearBabyLogo */}
+        <View style={{ marginBottom: 34, marginTop: 10 }}>
+          <ExpoImage
+            allowDownscaling={true}
+            cachePolicy={"disk"}
+            contentPosition={"center"}
+            contentFit={"cover"}
+            transitionDuration={300}
+            transitionEffect={"cross-dissolve"}
+            transitionTiming={"ease-in-out"}
+            source={imageSource(Images["DearBabyLogo"])}
+            style={StyleSheet.applyWidth({ height: 140, width: 140 }, dimensions.width)}
+          />
+        </View>
 
         {/* Headline */}
         <Text
@@ -210,11 +224,12 @@ const AuthSignupScreen = (props) => {
           selectable={false}
           style={StyleSheet.applyWidth(
             {
-              color: theme.colors.text.strong,
-              fontFamily: "Inter_700Bold",
-              fontSize: 24,
+              color: "#2C2C2C",
+              fontFamily: "Inter_600SemiBold",
+              fontSize: 26,
               textAlign: "center",
-              marginBottom: 24,
+              marginBottom: 12,
+              letterSpacing: -0.5,
             },
             dimensions.width,
           )}
@@ -222,364 +237,417 @@ const AuthSignupScreen = (props) => {
           {"Create your DearBaby account"}
         </Text>
 
-        {/* Error Banner */}
-        {errorMessage ? (
-          <View
-            style={StyleSheet.applyWidth(
-              {
-                backgroundColor: "#FFEBEE",
-                borderRadius: 12,
-                padding: 12,
-                marginBottom: 16,
-                width: "100%",
-                borderWidth: 1,
-                borderColor: "#FFCDD2",
-              },
-              dimensions.width,
-            )}
-          >
-            <Text
-              accessible={true}
-              selectable={false}
+        {/* Subheadline */}
+        <Text
+          accessible={true}
+          selectable={false}
+          style={StyleSheet.applyWidth(
+            {
+              color: "#6F6F6F",
+              fontFamily: "Inter_400Regular",
+              fontSize: 16,
+              textAlign: "center",
+              marginBottom: 36,
+              lineHeight: 24,
+            },
+            dimensions.width,
+          )}
+        >
+          {"Start capturing the moments that matter."}
+        </Text>
+
+        {/* White Form Card Container */}
+        <View
+          style={StyleSheet.applyWidth(
+            {
+              width: "100%",
+              maxWidth: 440,
+              backgroundColor: "#FFFFFF",
+              borderRadius: 32,
+              paddingTop: 36,
+              paddingBottom: 36,
+              paddingLeft: 28,
+              paddingRight: 28,
+              shadowColor: "#000000",
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 4,
+            },
+            dimensions.width,
+          )}
+        >
+          {/* Error Banner */}
+          {errorMessage ? (
+            <View
               style={StyleSheet.applyWidth(
                 {
-                  color: "#C62828",
-                  fontFamily: "Inter_500Medium",
-                  fontSize: 14,
-                  textAlign: "center",
+                  backgroundColor: "#FFEBEE",
+                  borderRadius: 12,
+                  padding: 12,
+                  marginBottom: 16,
+                  width: "100%",
+                  borderWidth: 1,
+                  borderColor: "#FFCDD2",
                 },
                 dimensions.width,
               )}
             >
-              {errorMessage}
-            </Text>
-          </View>
-        ) : null}
-
-        {/* Info Banner */}
-        {infoMessage ? (
-          <View
-            style={StyleSheet.applyWidth(
-              {
-                backgroundColor: "#E8F5E9",
-                borderRadius: 12,
-                padding: 12,
-                marginBottom: 16,
-                width: "100%",
-                borderWidth: 1,
-                borderColor: "#C8E6C9",
-              },
-              dimensions.width,
-            )}
-          >
-            <Text
-              accessible={true}
-              selectable={false}
-              style={StyleSheet.applyWidth(
-                {
-                  color: "#2E7D32",
-                  fontFamily: "Inter_500Medium",
-                  fontSize: 14,
-                  textAlign: "center",
-                },
-                dimensions.width,
-              )}
-            >
-              {infoMessage}
-            </Text>
-          </View>
-        ) : null}
-
-        {/* Full Name Input */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: "center",
-              backgroundColor: palettes.App["BG Gray"],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: "row",
-              height: 60,
-              justifyContent: "space-between",
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: "100%",
-              marginBottom: 12,
-            },
-            dimensions.width,
-          )}
-        >
-          <Icon
-            size={24}
-            color={palettes.App["Custom Color_20"]}
-            name={"Ionicons/person-outline"}
-          />
-          <View
-            style={StyleSheet.applyWidth(
-              { flex: 1, paddingLeft: 10, paddingRight: 10 },
-              dimensions.width,
-            )}
-          >
-            <TextInput
-              autoCapitalize={"words"}
-              autoCorrect={false}
-              changeTextDelay={500}
-              onChangeText={setFullName}
-              webShowOutline={true}
-              editable={true}
-              placeholder={"Full Name"}
-              placeholderTextColor={palettes.App["Custom Color_20"]}
-              style={StyleSheet.applyWidth(
-                {
-                  borderRadius: 8,
-                  paddingBottom: 8,
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  paddingTop: 8,
-                },
-                dimensions.width,
-              )}
-              value={fullName}
-            />
-          </View>
-        </View>
-
-        {/* Email Input */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: "center",
-              backgroundColor: palettes.App["BG Gray"],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: "row",
-              height: 60,
-              justifyContent: "space-between",
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: "100%",
-              marginBottom: 12,
-            },
-            dimensions.width,
-          )}
-        >
-          <Icon
-            size={24}
-            color={palettes.App["Custom Color_20"]}
-            name={"MaterialCommunityIcons/email"}
-          />
-          <View
-            style={StyleSheet.applyWidth(
-              { flex: 1, paddingLeft: 10, paddingRight: 10 },
-              dimensions.width,
-            )}
-          >
-            <TextInput
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              changeTextDelay={500}
-              onChangeText={setEmail}
-              webShowOutline={true}
-              editable={true}
-              placeholder={"Email"}
-              placeholderTextColor={palettes.App["Custom Color_20"]}
-              keyboardType={"email-address"}
-              style={StyleSheet.applyWidth(
-                {
-                  borderRadius: 8,
-                  paddingBottom: 8,
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  paddingTop: 8,
-                },
-                dimensions.width,
-              )}
-              value={email}
-            />
-          </View>
-        </View>
-
-        {/* Password Input */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: "center",
-              backgroundColor: palettes.App["BG Gray"],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: "row",
-              height: 60,
-              justifyContent: "space-between",
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: "100%",
-              marginBottom: 12,
-            },
-            dimensions.width,
-          )}
-        >
-          <Icon size={24} color={palettes.App["Custom Color_20"]} name={"FontAwesome/lock"} />
-          <View
-            style={StyleSheet.applyWidth(
-              { flex: 1, paddingLeft: 10, paddingRight: 10 },
-              dimensions.width,
-            )}
-          >
-            <TextInput
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              changeTextDelay={500}
-              onChangeText={setPassword}
-              webShowOutline={true}
-              editable={true}
-              placeholder={"Password (min 8 characters)"}
-              placeholderTextColor={palettes.App["Custom Color_20"]}
-              secureTextEntry={!isPasswordVisible}
-              style={StyleSheet.applyWidth(
-                {
-                  borderRadius: 8,
-                  paddingBottom: 8,
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  paddingTop: 8,
-                },
-                dimensions.width,
-              )}
-              value={password}
-            />
-          </View>
-          <Touchable
-            onPress={() => setIsPasswordVisible((prev) => !prev)}
-            accessibilityRole={"button"}
-            accessibilityLabel={isPasswordVisible ? "Hide password" : "Show password"}
-          >
-            <Icon
-              size={24}
-              color={palettes.App["Custom Color_20"]}
-              name={isPasswordVisible ? "Ionicons/eye" : "Ionicons/eye-off"}
-            />
-          </Touchable>
-        </View>
-
-        {/* Confirm Password Input */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: "center",
-              backgroundColor: palettes.App["BG Gray"],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: "row",
-              height: 60,
-              justifyContent: "space-between",
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: "100%",
-              marginBottom: 20,
-            },
-            dimensions.width,
-          )}
-        >
-          <Icon size={24} color={palettes.App["Custom Color_20"]} name={"FontAwesome/lock"} />
-          <View
-            style={StyleSheet.applyWidth(
-              { flex: 1, paddingLeft: 10, paddingRight: 10 },
-              dimensions.width,
-            )}
-          >
-            <TextInput
-              autoCapitalize={"none"}
-              autoCorrect={false}
-              changeTextDelay={500}
-              onChangeText={setConfirmPassword}
-              webShowOutline={true}
-              editable={true}
-              placeholder={"Confirm Password"}
-              placeholderTextColor={palettes.App["Custom Color_20"]}
-              secureTextEntry={!isConfirmPasswordVisible}
-              style={StyleSheet.applyWidth(
-                {
-                  borderRadius: 8,
-                  paddingBottom: 8,
-                  paddingLeft: 8,
-                  paddingRight: 8,
-                  paddingTop: 8,
-                },
-                dimensions.width,
-              )}
-              value={confirmPassword}
-            />
-          </View>
-          <Touchable
-            onPress={() => setIsConfirmPasswordVisible((prev) => !prev)}
-            accessibilityRole={"button"}
-            accessibilityLabel={isConfirmPasswordVisible ? "Hide password" : "Show password"}
-          >
-            <Icon
-              size={24}
-              color={palettes.App["Custom Color_20"]}
-              name={isConfirmPasswordVisible ? "Ionicons/eye" : "Ionicons/eye-off"}
-            />
-          </Touchable>
-        </View>
-
-        {/* Create Account Button */}
-        <Touchable
-          onPress={handleSignup}
-          disabled={loadingSignup || !isFormValid()}
-          style={StyleSheet.applyWidth({ width: "100%" }, dimensions.width)}
-        >
-          <View
-            style={StyleSheet.applyWidth(
-              {
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor:
-                  loadingSignup || !isFormValid() ? "#BDBDBD" : theme.colors.branding.primary,
-                borderRadius: 100,
-                height: 58,
-                width: "100%",
-              },
-              dimensions.width,
-            )}
-          >
-            {loadingSignup ? (
-              <ActivityIndicator size="small" color="#ffffff" />
-            ) : (
               <Text
                 accessible={true}
                 selectable={false}
                 style={StyleSheet.applyWidth(
                   {
-                    color: "#ffffff",
-                    fontFamily: "Inter_600SemiBold",
-                    fontSize: 15,
+                    color: "#C62828",
+                    fontFamily: "Inter_500Medium",
+                    fontSize: 14,
                     textAlign: "center",
                   },
                   dimensions.width,
                 )}
               >
-                {"Create my DearBaby account"}
+                {errorMessage}
               </Text>
+            </View>
+          ) : null}
+
+          {/* Info Banner */}
+          {infoMessage ? (
+            <View
+              style={StyleSheet.applyWidth(
+                {
+                  backgroundColor: "#E8F5E9",
+                  borderRadius: 12,
+                  padding: 12,
+                  marginBottom: 16,
+                  width: "100%",
+                  borderWidth: 1,
+                  borderColor: "#C8E6C9",
+                },
+                dimensions.width,
+              )}
+            >
+              <Text
+                accessible={true}
+                selectable={false}
+                style={StyleSheet.applyWidth(
+                  {
+                    color: "#2E7D32",
+                    fontFamily: "Inter_500Medium",
+                    fontSize: 14,
+                    textAlign: "center",
+                  },
+                  dimensions.width,
+                )}
+              >
+                {infoMessage}
+              </Text>
+            </View>
+          ) : null}
+
+          {/* Full Name Input */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: "center",
+                backgroundColor: "#F9FAFB",
+                borderBottomWidth: 1,
+                borderColor: "#E5E7EB",
+                borderLeftWidth: 0,
+                borderRadius: 16,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                flexDirection: "row",
+                height: 56,
+                justifyContent: "space-between",
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: "100%",
+                marginBottom: 16,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width,
             )}
+          >
+            <Icon size={20} color={"#9CA3AF"} name={"Ionicons/person-outline"} />
+            <View
+              style={StyleSheet.applyWidth(
+                { flex: 1, paddingLeft: 10, paddingRight: 10 },
+                dimensions.width,
+              )}
+            >
+              <TextInput
+                autoCapitalize={"words"}
+                autoCorrect={false}
+                changeTextDelay={500}
+                onChangeText={setFullName}
+                webShowOutline={true}
+                editable={true}
+                placeholder={"Full Name"}
+                placeholderTextColor={palettes.App["Custom Color_20"]}
+                style={StyleSheet.applyWidth(
+                  {
+                    borderRadius: 8,
+                    paddingBottom: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    paddingTop: 8,
+                  },
+                  dimensions.width,
+                )}
+                value={fullName}
+              />
+            </View>
           </View>
-        </Touchable>
+
+          {/* Email Input */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: "center",
+                backgroundColor: "#F9FAFB",
+                borderBottomWidth: 1,
+                borderColor: "#E5E7EB",
+                borderLeftWidth: 0,
+                borderRadius: 16,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                flexDirection: "row",
+                height: 56,
+                justifyContent: "space-between",
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: "100%",
+                marginBottom: 16,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width,
+            )}
+          >
+            <Icon size={20} color={"#9CA3AF"} name={"MaterialCommunityIcons/email-outline"} />
+            <View
+              style={StyleSheet.applyWidth(
+                { flex: 1, paddingLeft: 10, paddingRight: 10 },
+                dimensions.width,
+              )}
+            >
+              <TextInput
+                autoCapitalize={"none"}
+                autoCorrect={false}
+                changeTextDelay={500}
+                onChangeText={setEmail}
+                webShowOutline={true}
+                editable={true}
+                placeholder={"Email"}
+                placeholderTextColor={palettes.App["Custom Color_20"]}
+                keyboardType={"email-address"}
+                style={StyleSheet.applyWidth(
+                  {
+                    borderRadius: 8,
+                    paddingBottom: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    paddingTop: 8,
+                  },
+                  dimensions.width,
+                )}
+                value={email}
+              />
+            </View>
+          </View>
+
+          {/* Password Input */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: "center",
+                backgroundColor: "#F9FAFB",
+                borderBottomWidth: 1,
+                borderColor: "#E5E7EB",
+                borderLeftWidth: 0,
+                borderRadius: 16,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                flexDirection: "row",
+                height: 56,
+                justifyContent: "space-between",
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: "100%",
+                marginBottom: 16,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width,
+            )}
+          >
+            <Icon size={20} color={"#9CA3AF"} name={"FontAwesome/lock"} />
+            <View
+              style={StyleSheet.applyWidth(
+                { flex: 1, paddingLeft: 10, paddingRight: 10 },
+                dimensions.width,
+              )}
+            >
+              <TextInput
+                autoCapitalize={"none"}
+                autoCorrect={false}
+                changeTextDelay={500}
+                onChangeText={setPassword}
+                webShowOutline={true}
+                editable={true}
+                placeholder={"Password (min 8 characters)"}
+                placeholderTextColor={palettes.App["Custom Color_20"]}
+                secureTextEntry={!isPasswordVisible}
+                style={StyleSheet.applyWidth(
+                  {
+                    borderRadius: 8,
+                    paddingBottom: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    paddingTop: 8,
+                  },
+                  dimensions.width,
+                )}
+                value={password}
+              />
+            </View>
+            <Touchable
+              onPress={() => setIsPasswordVisible((prev) => !prev)}
+              accessibilityRole={"button"}
+              accessibilityLabel={isPasswordVisible ? "Hide password" : "Show password"}
+            >
+              <Icon
+                size={20}
+                color={"#9CA3AF"}
+                name={isPasswordVisible ? "Ionicons/eye" : "Ionicons/eye-off"}
+              />
+            </Touchable>
+          </View>
+
+          {/* Confirm Password Input */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: "center",
+                backgroundColor: "#F9FAFB",
+                borderBottomWidth: 1,
+                borderColor: "#E5E7EB",
+                borderLeftWidth: 0,
+                borderRadius: 16,
+                borderRightWidth: 0,
+                borderTopWidth: 0,
+                flexDirection: "row",
+                height: 56,
+                justifyContent: "space-between",
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: "100%",
+                marginBottom: 20,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width,
+            )}
+          >
+            <Icon size={20} color={"#9CA3AF"} name={"FontAwesome/lock"} />
+            <View
+              style={StyleSheet.applyWidth(
+                { flex: 1, paddingLeft: 10, paddingRight: 10 },
+                dimensions.width,
+              )}
+            >
+              <TextInput
+                autoCapitalize={"none"}
+                autoCorrect={false}
+                changeTextDelay={500}
+                onChangeText={setConfirmPassword}
+                webShowOutline={true}
+                editable={true}
+                placeholder={"Confirm Password"}
+                placeholderTextColor={palettes.App["Custom Color_20"]}
+                secureTextEntry={!isConfirmPasswordVisible}
+                style={StyleSheet.applyWidth(
+                  {
+                    borderRadius: 8,
+                    paddingBottom: 8,
+                    paddingLeft: 8,
+                    paddingRight: 8,
+                    paddingTop: 8,
+                  },
+                  dimensions.width,
+                )}
+                value={confirmPassword}
+              />
+            </View>
+            <Touchable
+              onPress={() => setIsConfirmPasswordVisible((prev) => !prev)}
+              accessibilityRole={"button"}
+              accessibilityLabel={isConfirmPasswordVisible ? "Hide password" : "Show password"}
+            >
+              <Icon
+                size={20}
+                color={"#9CA3AF"}
+                name={isConfirmPasswordVisible ? "Ionicons/eye" : "Ionicons/eye-off"}
+              />
+            </Touchable>
+          </View>
+
+          {/* Create Account Button */}
+          <Touchable
+            onPress={handleSignup}
+            disabled={loadingSignup || !isFormValid()}
+            style={StyleSheet.applyWidth({ width: "100%" }, dimensions.width)}
+          >
+            <View
+              style={StyleSheet.applyWidth(
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: loadingSignup || !isFormValid() ? "#BDBDBD" : "#0A84FF",
+                  borderRadius: 99,
+                  height: 56,
+                  width: "100%",
+                  shadowColor: loadingSignup || !isFormValid() ? "transparent" : "#0A84FF",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 8,
+                  elevation: 4,
+                },
+                dimensions.width,
+              )}
+            >
+              {loadingSignup ? (
+                <ActivityIndicator size="small" color="#ffffff" />
+              ) : (
+                <Text
+                  accessible={true}
+                  selectable={false}
+                  style={StyleSheet.applyWidth(
+                    {
+                      color: "#ffffff",
+                      fontFamily: "Inter_600SemiBold",
+                      fontSize: 16,
+                      textAlign: "center",
+                    },
+                    dimensions.width,
+                  )}
+                >
+                  {"Create my DearBaby account"}
+                </Text>
+              )}
+            </View>
+          </Touchable>
+        </View>
 
         {/* Or continue with divider */}
         <View
@@ -590,55 +658,53 @@ const AuthSignupScreen = (props) => {
               height: 45,
               justifyContent: "space-between",
               width: "100%",
-              marginTop: 20,
+              maxWidth: 440,
+              marginTop: 24,
             },
             dimensions.width,
           )}
         >
-          <Divider
-            color={theme.colors.border.base}
-            style={StyleSheet.applyWidth({ height: 2, width: "30%" }, dimensions.width)}
-          />
+          <View style={{ height: 1, width: "30%", backgroundColor: "#E5E7EB" }} />
           <Text
             accessible={true}
             selectable={false}
             style={StyleSheet.applyWidth(
               {
-                color: theme.colors.text.strong,
+                color: "#9CA3AF",
                 fontFamily: "Inter_500Medium",
                 fontSize: 14,
                 marginLeft: 10,
                 marginRight: 10,
-                opacity: 0.7,
               },
               dimensions.width,
             )}
           >
             {"or"}
           </Text>
-          <Divider
-            color={theme.colors.border.base}
-            style={StyleSheet.applyWidth({ height: 2, width: "30%" }, dimensions.width)}
-          />
+          <View style={{ height: 1, width: "30%", backgroundColor: "#E5E7EB" }} />
         </View>
 
         {/* Google Sign In Button */}
         <Touchable
           onPress={handleGoogleSignIn}
-          style={StyleSheet.applyWidth({ width: "100%", marginTop: 10 }, dimensions.width)}
+          style={StyleSheet.applyWidth(
+            { width: "100%", maxWidth: 440, marginTop: 20 },
+            dimensions.width,
+          )}
         >
           <View
             style={StyleSheet.applyWidth(
               {
                 alignItems: "center",
-                borderBottomWidth: 2,
-                borderColor: theme.colors.border.brand,
-                borderLeftWidth: 2,
-                borderRadius: 100,
-                borderRightWidth: 2,
-                borderTopWidth: 2,
+                backgroundColor: "#FFFFFF",
+                borderBottomWidth: 1,
+                borderColor: "#E0E0E0",
+                borderLeftWidth: 1,
+                borderRadius: 24,
+                borderRightWidth: 1,
+                borderTopWidth: 1,
                 flexDirection: "row",
-                height: 58,
+                height: 56,
                 justifyContent: "center",
                 width: "100%",
               },
@@ -664,7 +730,7 @@ const AuthSignupScreen = (props) => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: theme.colors.text.strong,
+                  color: "#2C2C2C",
                   fontFamily: "Inter_600SemiBold",
                   fontSize: 15,
                 },
@@ -676,37 +742,21 @@ const AuthSignupScreen = (props) => {
           </View>
         </Touchable>
 
-        {/* Google info text */}
-        <Text
-          accessible={true}
-          selectable={false}
-          style={StyleSheet.applyWidth(
-            {
-              color: palettes.App["Custom Color_20"],
-              fontFamily: "Inter_400Regular",
-              fontSize: 12,
-              textAlign: "center",
-              marginTop: 8,
-            },
-            dimensions.width,
-          )}
-        >
-          {"We'll open Google in a secure browser window."}
-        </Text>
-
         {/* Login Link */}
         <Touchable
-          onPress={() => navigation.navigate("AuthStack", { screen: "index" })}
-          style={StyleSheet.applyWidth({ width: "100%", marginTop: 20 }, dimensions.width)}
+          onPress={() => navigation.navigate("index")}
+          style={StyleSheet.applyWidth(
+            { width: "100%", maxWidth: 440, marginTop: 24 },
+            dimensions.width,
+          )}
         >
           <View
             style={StyleSheet.applyWidth(
               {
                 alignItems: "center",
-                flexDirection: "row",
                 justifyContent: "center",
-                paddingBottom: 10,
-                paddingTop: 10,
+                paddingBottom: 20,
+                paddingTop: 12,
               },
               dimensions.width,
             )}
@@ -716,8 +766,11 @@ const AuthSignupScreen = (props) => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: palettes.App["Custom Color_20"],
+                  color: "#6F6F6F",
                   fontFamily: "Inter_400Regular",
+                  fontSize: 15,
+                  textAlign: "center",
+                  marginBottom: 6,
                 },
                 dimensions.width,
               )}
@@ -729,17 +782,39 @@ const AuthSignupScreen = (props) => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: palettes.App["Custom Color"],
+                  color: "#FF9AA2",
                   fontFamily: "Inter_600SemiBold",
-                  marginLeft: 7,
+                  fontSize: 15,
+                  textAlign: "center",
+                  lineHeight: 22,
                 },
                 dimensions.width,
               )}
             >
-              {"Log in"}
+              {"Welcome back — log in here"}
             </Text>
           </View>
         </Touchable>
+
+        {/* Emotional microcopy */}
+        <Text
+          accessible={true}
+          selectable={false}
+          style={StyleSheet.applyWidth(
+            {
+              color: "#C7CEEA",
+              fontFamily: "Inter_400Regular",
+              fontSize: 14,
+              textAlign: "center",
+              marginTop: 24,
+              lineHeight: 20,
+              maxWidth: 440,
+            },
+            dimensions.width,
+          )}
+        >
+          {"Every moment you save becomes a memory they'll cherish forever."}
+        </Text>
       </View>
     </ScreenContainer>
   );

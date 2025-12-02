@@ -58,7 +58,7 @@
     "@rn-primitives/toggle": "^1.2.0",
     "@rn-primitives/toggle-group": "^1.2.0",
     "@rn-primitives/tooltip": "^1.2.0",
-    "@shopify/flash-list": "^1.7.3",
+    "@shopify/flash-list": "1.7.1",
     "@shopify/mime-types": "^2.1.0",
     "@types/react": "~18.3.12",
     "class-variance-authority": "^0.7.1",
@@ -124,6 +124,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "resolutions": {
+    "@shopify/flash-list": "1.7.1",
     "react-native-gesture-handler": "~2.20.2",
     "prop-types": "^15.8.1",
     "expo-location": "~18.0.4"

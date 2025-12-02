@@ -194,7 +194,19 @@ const LoginScreen = props => {
   };
 
   return (
-    <ScreenContainer scrollable={false} hasSafeArea={true} style={{ backgroundColor: '#f0f0f0' }}>
+    <ScreenContainer scrollable={true} hasSafeArea={true} style={{ backgroundColor: 'transparent' }}>
+      {/* Soft Pastel Gradient Background */}
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: '#FFF7F8',
+        }}
+      />
+
       <View
         style={{
           alignItems: 'center',
@@ -202,42 +214,89 @@ const LoginScreen = props => {
           justifyContent: 'center',
           paddingLeft: 24,
           paddingRight: 24,
-          paddingTop: 20,
-          backgroundColor: '#ffffff',
+          paddingTop: 40,
+          paddingBottom: 40,
         }}
       >
-        {/* Logo */}
-        <ExpoImage
-          allowDownscaling={true}
-          cachePolicy={'disk'}
-          contentPosition={'center'}
-          contentFit={'cover'}
-          transitionDuration={300}
-          transitionEffect={'cross-dissolve'}
-          transitionTiming={'ease-in-out'}
-          source={imageSource(Images['BigLogo'])}
-          style={StyleSheet.applyWidth(
-            { height: 120, width: 120 },
-            dimensions.width
-          )}
-        />
-        {/* Login to Your Account */}
+        {/* Logo - Larger and Elegant */}
+        <View style={{ marginBottom: 34, marginTop: 10 }}>
+          <ExpoImage
+            allowDownscaling={true}
+            cachePolicy={'disk'}
+            contentPosition={'center'}
+            contentFit={'contain'}
+            transitionDuration={300}
+            transitionEffect={'cross-dissolve'}
+            transitionTiming={'ease-in-out'}
+            source={imageSource(Images['DearBabyLogo'])}
+            style={StyleSheet.applyWidth(
+              { height: 140, width: 140 },
+              dimensions.width
+            )}
+          />
+        </View>
+
+        {/* Welcome Headline */}
         <Text
           accessible={true}
           selectable={false}
           style={StyleSheet.applyWidth(
             {
-              color: theme.colors.text.strong,
-              fontFamily: 'Inter_700Bold',
-              fontSize: 28,
+              color: '#2C2C2C',
+              fontFamily: 'Inter_600SemiBold',
+              fontSize: 26,
+              textAlign: 'center',
+              marginBottom: 12,
+              letterSpacing: -0.5,
             },
             dimensions.width
           )}
         >
-          {'Login to Your Account'}
+          {'Welcome back to DearBaby'}
         </Text>
-        {/* Error Message */}
-        <>
+
+        {/* Gentle Subheadline */}
+        <Text
+          accessible={true}
+          selectable={false}
+          style={StyleSheet.applyWidth(
+            {
+              color: '#6F6F6F',
+              fontFamily: 'Inter_400Regular',
+              fontSize: 16,
+              textAlign: 'center',
+              marginBottom: 36,
+              lineHeight: 24,
+            },
+            dimensions.width
+          )}
+        >
+          {"Continue your little one's story."}
+        </Text>
+
+        {/* White Card Container for Form */}
+        <View
+          style={StyleSheet.applyWidth(
+            {
+              width: '100%',
+              maxWidth: 440,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 32,
+              paddingTop: 36,
+              paddingBottom: 36,
+              paddingLeft: 28,
+              paddingRight: 28,
+              shadowColor: '#000000',
+              shadowOffset: { width: 0, height: 6 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 4,
+            },
+            dimensions.width
+          )}
+        >
+          {/* Error Message */}
+          <>
           {!errorMessage ? null : (
             <Text
               accessible={true}
@@ -262,33 +321,38 @@ const LoginScreen = props => {
             </Text>
           )}
         </>
-        {/* Email */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: 'center',
-              backgroundColor: palettes.App['BG Gray'],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: 'row',
-              height: 60,
-              justifyContent: 'space-between',
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: '100%',
-            },
-            dimensions.width
-          )}
-        >
-          <Icon
-            size={24}
-            color={palettes.App['Custom Color_20']}
-            name={'MaterialCommunityIcons/email'}
-          />
+          {/* Email */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: 'center',
+                backgroundColor: '#F9FAFB',
+                borderBottomWidth: 1,
+                borderColor: '#E5E7EB',
+                borderLeftWidth: 1,
+                borderRadius: 16,
+                borderRightWidth: 1,
+                borderTopWidth: 1,
+                flexDirection: 'row',
+                height: 56,
+                justifyContent: 'space-between',
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: '100%',
+                marginBottom: 16,
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width
+            )}
+          >
+            <Icon
+              size={20}
+              color={'#9CA3AF'}
+              name={'MaterialCommunityIcons/email-outline'}
+            />
           <View
             style={StyleSheet.applyWidth(
               { flex: 1, paddingLeft: 10, paddingRight: 10 },
@@ -330,33 +394,38 @@ const LoginScreen = props => {
             />
           </View>
         </View>
-        {/* Password */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              alignItems: 'center',
-              backgroundColor: palettes.App['BG Gray'],
-              borderBottomWidth: 1,
-              borderColor: theme.colors.border.brand,
-              borderLeftWidth: 1,
-              borderRadius: 16,
-              borderRightWidth: 1,
-              borderTopWidth: 1,
-              flexDirection: 'row',
-              height: 60,
-              justifyContent: 'space-between',
-              paddingLeft: 20,
-              paddingRight: 20,
-              width: '100%',
-            },
-            dimensions.width
-          )}
-        >
-          <Icon
-            size={24}
-            color={palettes.App['Custom Color_20']}
-            name={'FontAwesome/lock'}
-          />
+          {/* Password */}
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: 'center',
+                backgroundColor: '#F9FAFB',
+                borderBottomWidth: 1,
+                borderColor: '#E5E7EB',
+                borderLeftWidth: 1,
+                borderRadius: 16,
+                borderRightWidth: 1,
+                borderTopWidth: 1,
+                flexDirection: 'row',
+                height: 56,
+                justifyContent: 'space-between',
+                paddingLeft: 20,
+                paddingRight: 20,
+                width: '100%',
+                marginBottom: 20,
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.03,
+                shadowRadius: 4,
+              },
+              dimensions.width
+            )}
+          >
+            <Icon
+              size={20}
+              color={'#9CA3AF'}
+              name={'Feather/lock'}
+            />
           <View
             style={StyleSheet.applyWidth(
               { flex: 1, paddingLeft: 10, paddingRight: 10 },
@@ -612,18 +681,26 @@ const LoginScreen = props => {
           }}
           style={StyleSheet.applyWidth(
             {
-              backgroundColor: theme.colors.branding.primary,
-              borderRadius: 100,
+              backgroundColor: '#0A84FF',
+              borderRadius: 99,
               fontFamily: 'Inter_600SemiBold',
-              fontSize: 15,
-              height: 58,
+              fontSize: 16,
+              height: 56,
               textAlign: 'center',
               width: '100%',
+              shadowColor: '#0A84FF',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.2,
+              shadowRadius: 8,
+              elevation: 4,
             },
             dimensions.width
           )}
-          title={'Sign in'}
+          title={'Log in'}
         />
+        </View>
+        {/* End of White Card Container */}
+
         {/* Forgot Password */}
         <Touchable
           style={StyleSheet.applyWidth({ width: '100%' }, dimensions.width)}
@@ -703,133 +780,71 @@ const LoginScreen = props => {
             )}
           />
         </View>
-        {/* Social options */}
-        <View
-          style={StyleSheet.applyWidth(
-            {
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              width: '100%',
-            },
-            dimensions.width
-          )}
-        >
-          {/* Facebook */}
-          <Touchable>
-            <View
+        {/* Google Sign In Button */}
+        <Touchable onPress={handleGoogleSignIn} style={{ width: '100%', maxWidth: 440 }}>
+          <View
+            style={StyleSheet.applyWidth(
+              {
+                alignItems: 'center',
+                backgroundColor: '#FFFFFF',
+                borderBottomWidth: 1,
+                borderColor: '#E0E0E0',
+                borderLeftWidth: 1,
+                borderRadius: 24,
+                borderRightWidth: 1,
+                borderTopWidth: 1,
+                flexDirection: 'row',
+                height: 56,
+                justifyContent: 'center',
+                width: '100%',
+                paddingLeft: 20,
+                paddingRight: 20,
+              },
+              dimensions.width
+            )}
+          >
+            <ExpoImage
+              allowDownscaling={true}
+              cachePolicy={'disk'}
+              contentPosition={'center'}
+              resizeMode={'contain'}
+              transitionDuration={300}
+              transitionEffect={'cross-dissolve'}
+              transitionTiming={'ease-in-out'}
+              source={imageSource(Images['ObGoogle'])}
+              style={StyleSheet.applyWidth(
+                { height: 24, width: 24, marginRight: 12 },
+                dimensions.width
+              )}
+            />
+            <Text
+              accessible={true}
+              selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  alignItems: 'center',
-                  borderBottomWidth: 2,
-                  borderColor: theme.colors.border.brand,
-                  borderLeftWidth: 2,
-                  borderRadius: 16,
-                  borderRightWidth: 2,
-                  borderTopWidth: 2,
-                  flexDirection: 'row',
-                  height: 60,
-                  justifyContent: 'center',
-                  width: 88,
+                  color: '#2C2C2C',
+                  fontFamily: 'Inter_600SemiBold',
+                  fontSize: 15,
                 },
                 dimensions.width
               )}
             >
-              <ExpoImage
-                allowDownscaling={true}
-                cachePolicy={'disk'}
-                contentPosition={'center'}
-                resizeMode={'cover'}
-                transitionDuration={300}
-                transitionEffect={'cross-dissolve'}
-                transitionTiming={'ease-in-out'}
-                source={imageSource(Images['ObFB'])}
-                style={StyleSheet.applyWidth(
-                  { height: 24, width: 24 },
-                  dimensions.width
-                )}
-              />
-            </View>
-          </Touchable>
-          {/* Google */}
-          <Touchable onPress={handleGoogleSignIn}>
-            <View
-              style={StyleSheet.applyWidth(
-                {
-                  alignItems: 'center',
-                  borderBottomWidth: 2,
-                  borderColor: theme.colors.border.brand,
-                  borderLeftWidth: 2,
-                  borderRadius: 16,
-                  borderRightWidth: 2,
-                  borderTopWidth: 2,
-                  flexDirection: 'row',
-                  height: 60,
-                  justifyContent: 'center',
-                  width: 88,
-                },
-                dimensions.width
-              )}
-            >
-              <ExpoImage
-                allowDownscaling={true}
-                cachePolicy={'disk'}
-                contentPosition={'center'}
-                resizeMode={'cover'}
-                transitionDuration={300}
-                transitionEffect={'cross-dissolve'}
-                transitionTiming={'ease-in-out'}
-                source={imageSource(Images['ObGoogle'])}
-                style={StyleSheet.applyWidth(
-                  { height: 24, width: 24 },
-                  dimensions.width
-                )}
-              />
-            </View>
-          </Touchable>
-          {/* Apple */}
-          <Touchable>
-            <View
-              style={StyleSheet.applyWidth(
-                {
-                  alignItems: 'center',
-                  borderBottomWidth: 2,
-                  borderColor: theme.colors.border.brand,
-                  borderLeftWidth: 2,
-                  borderRadius: 16,
-                  borderRightWidth: 2,
-                  borderTopWidth: 2,
-                  flexDirection: 'row',
-                  height: 60,
-                  justifyContent: 'center',
-                  width: 88,
-                },
-                dimensions.width
-              )}
-            >
-              <Image
-                resizeMode={'cover'}
-                source={imageSource(Images['ObApple'])}
-                style={StyleSheet.applyWidth(
-                  { height: 24, width: 24 },
-                  dimensions.width
-                )}
-              />
-            </View>
-          </Touchable>
-        </View>
-        {/* Sign up */}
+              {'Continue with Google'}
+            </Text>
+          </View>
+        </Touchable>
+        {/* Sign up CTA - Emotional & Story-Driven */}
         <Touchable
           onPress={() => navigation.navigate('AuthStack', { screen: 'SignupScreen' })}
-          style={StyleSheet.applyWidth({ width: '100%' }, dimensions.width)}
+          style={StyleSheet.applyWidth({ width: '100%', maxWidth: 440 }, dimensions.width)}
         >
           <View
             style={StyleSheet.applyWidth(
               {
                 alignItems: 'center',
-                flexDirection: 'row',
                 justifyContent: 'center',
-                paddingBottom: 10,
-                paddingTop: 10,
+                paddingBottom: 20,
+                paddingTop: 12,
               },
               dimensions.width
             )}
@@ -839,8 +854,11 @@ const LoginScreen = props => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: palettes.App['Custom Color_20'],
+                  color: '#6F6F6F',
                   fontFamily: 'Inter_400Regular',
+                  fontSize: 15,
+                  textAlign: 'center',
+                  marginBottom: 6,
                 },
                 dimensions.width
               )}
@@ -853,34 +871,39 @@ const LoginScreen = props => {
               selectable={false}
               style={StyleSheet.applyWidth(
                 {
-                  color: palettes.App['Custom Color'],
+                  color: '#FF9AA2',
                   fontFamily: 'Inter_600SemiBold',
-                  marginLeft: 7,
+                  fontSize: 15,
+                  textAlign: 'center',
+                  lineHeight: 22,
                 },
                 dimensions.width
               )}
             >
-              {'Sign up'}
+              {"Start capturing the moments that matter"}
             </Text>
           </View>
         </Touchable>
 
-        {/* Google info text */}
+        {/* Emotional microcopy */}
         <Text
           accessible={true}
           selectable={false}
           style={StyleSheet.applyWidth(
             {
-              color: palettes.App['Custom Color_20'],
+              color: '#C7CEEA',
               fontFamily: 'Inter_400Regular',
-              fontSize: 12,
+              fontSize: 14,
               textAlign: 'center',
-              marginTop: 4,
+              marginTop: 24,
+              lineHeight: 20,
+              paddingLeft: 20,
+              paddingRight: 20,
             },
             dimensions.width
           )}
         >
-          {"Tap Google icon above to sign in with your Google account."}
+          {"Every moment you save becomes a memory they'll cherish forever."}
         </Text>
       </View>
     </ScreenContainer>

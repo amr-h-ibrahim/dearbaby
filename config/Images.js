@@ -1,6 +1,7 @@
 export default {
   DatingIconColor: require("../assets/images/DatingIconColor.png"),
   BigLogo: require("../assets/images/BigLogo.png"),
+  DearBabyLogo: "https://ade93f25f7.draftbit.media/DearbabyLogo.png",
   ObFB: require("../assets/images/ObFB.png"),
   ObGoogle: require("../assets/images/ObGoogle.png"),
   ObApple: require("../assets/images/ObApple.png"),
